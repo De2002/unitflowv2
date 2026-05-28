@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.omniconverter.cyou/sitemap.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-length.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-area.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-volume.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-weight.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-temperature.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-speed.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-time.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-data.xml
+Sitemap: https://www.omniconverter.cyou/sitemap-energy.xml
