@@ -391,11 +391,12 @@
             <div class="flex-1 min-w-0"><p class="nav-label text-sm font-medium text-gray-300">Speed</p><p class="text-xs text-gray-600">30+ units</p></div>
             <i class="fa-solid fa-chevron-right text-xs text-cyan-400/70"></i>
           </a>
-          <button onclick="showComingSoon('Time')"
-            class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all group hover:bg-white/3">
-            <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-600"><i class="fa-solid fa-clock text-xs"></i></span>
-            <div class="flex-1"><p class="text-sm font-medium text-gray-500">Time</p><p class="soon-badge text-xs text-indigo-500/70">Coming soon</p></div>
-          </button>
+          <a href="/time" data-cat="time"
+            class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all duration-200 group">
+            <span class="nav-icon w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center text-violet-400"><i class="fa-solid fa-clock text-xs"></i></span>
+            <div class="flex-1 min-w-0"><p class="nav-label text-sm font-medium text-gray-300">Time</p><p class="text-xs text-gray-600">35+ units</p></div>
+            <i class="fa-solid fa-chevron-right text-xs text-violet-400/70"></i>
+          </a>
           <button onclick="showComingSoon('Pressure')"
             class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all group hover:bg-white/3">
             <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-600"><i class="fa-solid fa-compress-arrows-alt text-xs"></i></span>
@@ -435,9 +436,9 @@
           <span class="text-gray-700">•</span>
           <a href="/terms" class="text-gray-400 hover:text-indigo-400 transition-colors">Terms</a>
           <span class="text-gray-700">•</span>
-          <button onclick="openLegalModal('privacy')" class="text-gray-400 hover:text-indigo-400 transition-colors">Privacy</button>
+          <a href="/privacy" class="text-gray-400 hover:text-indigo-400 transition-colors">Privacy</a>
           <span class="text-gray-700">•</span>
-          <button onclick="openLegalModal('disclaimer')" class="text-gray-400 hover:text-indigo-400 transition-colors">Disclaimer</button>
+          <a href="/disclaimer" class="text-gray-400 hover:text-indigo-400 transition-colors">Disclaimer</a>
         </nav>
       </div>
       <div class="mt-5 pt-4 border-t text-xs text-gray-600 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2" style="border-color: var(--border-secondary);">
@@ -1485,9 +1486,19 @@ function getRoute() {
     return { view: 'spd_unit', key: keyFromSlug(parts[1]) };
   }
   if (parts[0] === 'speed') return { view: 'speed' };
+  // /time/hour-to-minute
+  if (parts[0] === 'time' && parts[1]) {
+    const conv = splitConvSlug(parts[1]);
+    if (conv && conv.from && conv.to)
+      return { view: 'tm_conv', fromKey: keyFromSlug(conv.from), toKey: keyFromSlug(conv.to) };
+    return { view: 'tm_unit', key: keyFromSlug(parts[1]) };
+  }
+  if (parts[0] === 'time') return { view: 'time' };
   if (parts[0] === 'about') return { view: 'about' };
   if (parts[0] === 'site-owners') return { view: 'site_owners' };
   if (parts[0] === 'terms') return { view: 'terms' };
+  if (parts[0] === 'privacy') return { view: 'privacy' };
+  if (parts[0] === 'disclaimer') return { view: 'disclaimer' };
   return { view: 'landing' };
 }
 
@@ -1524,9 +1535,15 @@ function router() {
   if (route.view === 'spd_conv') { const f=getSpeedUnit(route.fromKey),t=getSpeedUnit(route.toKey); if(f&&t){renderSpeedConversionPage(route.fromKey,route.toKey);return;} }
   if (route.view === 'spd_unit') { if(getSpeedUnit(route.key)){renderSpeedUnitPage(route.key);return;} }
   if (route.view === 'speed') { renderSpeedPage(); return; }
+  // Time routes
+  if (route.view === 'tm_conv') { const f=getTimeUnit(route.fromKey),t=getTimeUnit(route.toKey); if(f&&t){renderTimeConversionPage(route.fromKey,route.toKey);return;} }
+  if (route.view === 'tm_unit') { if(getTimeUnit(route.key)){renderTimeUnitPage(route.key);return;} }
+  if (route.view === 'time') { renderTimePage(); return; }
   if (route.view === 'about') { renderAboutPage(); return; }
   if (route.view === 'site_owners') { renderSiteOwnersPage(); return; }
   if (route.view === 'terms') { renderTermsPage(); return; }
+  if (route.view === 'privacy') { renderPrivacyPage(); return; }
+  if (route.view === 'disclaimer') { renderDisclaimerPage(); return; }
   renderLandingPage();
 }
 
@@ -1686,8 +1703,217 @@ function renderTermsPage() {
             <p class="text-gray-500 text-xs">Review our Privacy Policy and Disclaimer for related information.</p>
           </div>
           <div class="flex gap-3">
-            <button onclick="openLegalModal('privacy')" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Privacy Policy</button>
-            <button onclick="openLegalModal('disclaimer')" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Disclaimer</button>
+            <a href="/privacy" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Privacy Policy</a>
+            <a href="/disclaimer" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Disclaimer</a>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+}
+
+function renderPrivacyPage() {
+  updateNavActive('');
+  updateSEO({
+    title: 'Privacy Policy | Omni Converter',
+    description: 'Read the Privacy Policy for Omni Converter. Learn how we handle data, analytics, and advertising on our free online unit conversion tool.',
+    url: 'https://www.omniconverter.cyou/privacy'
+  });
+  const root = document.getElementById('app-root');
+  root.innerHTML = `
+    <div class="page-fade max-w-3xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-gray-600 mb-6">
+        <button onclick="navigate('/')" class="hover:text-indigo-400 transition-colors">Omni Converter</button>
+        <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+        <span class="text-gray-400">Privacy Policy</span>
+      </nav>
+
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-xs font-medium text-indigo-400 mb-4">
+          <i class="fa-solid fa-shield-halved text-xs"></i> Legal
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Privacy Policy</h1>
+        <p class="text-gray-500 text-sm">Last updated: May 2025</p>
+      </div>
+
+      <div class="space-y-6 text-sm text-gray-400 leading-relaxed">
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">1. Overview</h2>
+          <p>Omni Converter ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains what information is collected when you use <span class="text-indigo-400">omniconverter.cyou</span> and how that information is used. By using the Site, you agree to the collection and use of information as described here.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">2. Information We Collect</h2>
+          <p class="mb-3">We do not require you to create an account or submit any personal information to use Omni Converter. However, the following data may be collected automatically:</p>
+          <ul class="space-y-2.5 list-none">
+            <li class="flex items-start gap-2.5"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-1 flex-shrink-0"></i><span><strong class="text-white">Usage analytics.</strong> We use Google Analytics (GA4) to collect anonymised data about page views, session duration, device type, and general geographic location (country/region level). This helps us understand how visitors use the Site and improve the experience.</span></li>
+            <li class="flex items-start gap-2.5"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-1 flex-shrink-0"></i><span><strong class="text-white">Log data.</strong> Like most websites, our hosting provider may automatically record standard server log information such as your IP address, browser type, referring URL, and timestamps. This data is used for security and performance monitoring.</span></li>
+            <li class="flex items-start gap-2.5"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-1 flex-shrink-0"></i><span><strong class="text-white">Advertising data.</strong> We display third-party advertisements on the Site. These ad networks (including Google AdSense) may use cookies and similar tracking technologies to serve personalised ads based on your browsing behaviour across websites. We do not control the data practices of these third parties.</span></li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">3. Cookies</h2>
+          <p class="mb-3">Cookies are small text files placed on your device by a website. We and our third-party partners use cookies for the following purposes:</p>
+          <ul class="space-y-2 list-none">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-0.5 flex-shrink-0"></i><span><strong class="text-white">Analytics cookies</strong> (Google Analytics) to track usage patterns in anonymised form.</span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-0.5 flex-shrink-0"></i><span><strong class="text-white">Advertising cookies</strong> placed by third-party ad networks to deliver relevant advertisements.</span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-0.5 flex-shrink-0"></i><span><strong class="text-white">Preference cookies</strong> used to remember your theme preference (light/dark mode) locally in your browser.</span></li>
+          </ul>
+          <p class="mt-3">You can control or disable cookies through your browser settings. Note that disabling cookies may affect the functionality of third-party advertising displayed on the Site.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">4. How We Use Your Information</h2>
+          <p class="mb-3">Any data we collect is used solely to:</p>
+          <ul class="space-y-2 list-none">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-500/70 text-xs mt-0.5 flex-shrink-0"></i>Understand how visitors use the Site and improve content and performance</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-500/70 text-xs mt-0.5 flex-shrink-0"></i>Detect and address technical issues or security incidents</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-500/70 text-xs mt-0.5 flex-shrink-0"></i>Display relevant advertisements to support the free service</li>
+          </ul>
+          <p class="mt-3">We do <strong class="text-white">not</strong> sell, rent, or share your personal data with third parties for their own marketing purposes, except as described above in the context of advertising partnerships.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">5. Third-Party Services</h2>
+          <p class="mb-3">The Site integrates the following third-party services, each with their own privacy policies:</p>
+          <ul class="space-y-2 list-none">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-0.5 flex-shrink-0"></i><strong class="text-white">Google Analytics</strong> — anonymised usage tracking. <span class="text-gray-500">See Google's Privacy Policy.</span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-0.5 flex-shrink-0"></i><strong class="text-white">Google AdSense</strong> — contextual and interest-based advertising. <span class="text-gray-500">See Google's Ad Privacy Policy.</span></li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-indigo-500/70 text-xs mt-0.5 flex-shrink-0"></i><strong class="text-white">CDN / hosting providers</strong> — Vercel and Cloudflare may process server logs containing IP addresses for security and performance purposes.</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">6. Children's Privacy</h2>
+          <p>Omni Converter is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided personal information on the Site, please contact us and we will take appropriate steps to remove it.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">7. Data Retention</h2>
+          <p>Anonymised analytics data is retained in accordance with Google Analytics' standard data retention settings (typically 14 months by default). Server log data is retained for a limited period for security purposes and then deleted.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">8. Your Rights</h2>
+          <p class="mb-3">Depending on your jurisdiction, you may have rights regarding your personal data, including:</p>
+          <ul class="space-y-2 list-none">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-500/70 text-xs mt-0.5 flex-shrink-0"></i>The right to know what data is collected about you</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-500/70 text-xs mt-0.5 flex-shrink-0"></i>The right to opt out of interest-based advertising (via your browser or Google's ad settings)</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-500/70 text-xs mt-0.5 flex-shrink-0"></i>The right to disable analytics tracking (via browser settings or browser extensions such as uBlock Origin or Google Analytics Opt-out Add-on)</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">9. Changes to This Policy</h2>
+          <p>We may update this Privacy Policy from time to time. Changes are effective when posted on this page with an updated date. Continued use of the Site after changes constitutes acceptance of the revised policy.</p>
+        </div>
+
+        <div class="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-white font-medium mb-1">Related legal pages</p>
+            <p class="text-gray-500 text-xs">Read our Terms of Use and Disclaimer for more information.</p>
+          </div>
+          <div class="flex gap-3">
+            <a href="/terms" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Terms of Use</a>
+            <a href="/disclaimer" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Disclaimer</a>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+}
+
+function renderDisclaimerPage() {
+  updateNavActive('');
+  updateSEO({
+    title: 'Disclaimer | Omni Converter',
+    description: 'Read the Disclaimer for Omni Converter. Important information about the accuracy of conversion results and the appropriate use of this free tool.',
+    url: 'https://www.omniconverter.cyou/disclaimer'
+  });
+  const root = document.getElementById('app-root');
+  root.innerHTML = `
+    <div class="page-fade max-w-3xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-gray-600 mb-6">
+        <button onclick="navigate('/')" class="hover:text-indigo-400 transition-colors">Omni Converter</button>
+        <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+        <span class="text-gray-400">Disclaimer</span>
+      </nav>
+
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/25 text-xs font-medium text-amber-400 mb-4">
+          <i class="fa-solid fa-triangle-exclamation text-xs"></i> Legal
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Disclaimer</h1>
+        <p class="text-gray-500 text-sm">Last updated: May 2025</p>
+      </div>
+
+      <div class="space-y-6 text-sm text-gray-400 leading-relaxed">
+
+        <div class="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
+          <div class="flex items-start gap-3 mb-3">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-lg flex-shrink-0 mt-0.5"></i>
+            <div>
+              <h2 class="text-base font-semibold text-white mb-2">Important Notice</h2>
+              <p>The conversion results provided by Omni Converter are generated automatically using standard conversion factors and formulae. While we strive for accuracy, these results are provided <strong class="text-white">for informational and educational purposes only</strong> and should not be relied upon as the sole basis for decisions in safety-critical, legal, medical, contractual, financial, or engineering contexts without independent verification.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">1. Accuracy of Conversion Results</h2>
+          <p class="mb-3">We use internationally recognised conversion factors from authoritative sources including NIST (National Institute of Standards and Technology), BIPM (Bureau International des Poids et Mesures), and ISO standards. Conversion results are computed in real time in your browser with up to 10 significant figures of precision.</p>
+          <p class="mb-3">However, some units — particularly historical, non-SI, or regionally defined units — may have multiple accepted definitions that differ slightly between sources. Where ambiguity exists, we have selected the most widely used definition and noted it where applicable.</p>
+          <p>We do not warrant that all conversion results are free from error. You should always verify results independently before using them in any high-stakes context.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">2. Professional and Safety-Critical Use</h2>
+          <p class="mb-3">Omni Converter is a general-purpose reference tool. It is <strong class="text-white">not a substitute for professional advice</strong> or certified measurement equipment. Do not rely solely on results from this tool for:</p>
+          <ul class="space-y-2 list-none">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Medical dosing, clinical measurements, or health decisions</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Structural, mechanical, or electrical engineering calculations</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Legal contracts, customs declarations, or regulatory compliance</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Navigation, aviation, or maritime operations</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Financial transactions, commodity trading, or tax calculations</li>
+          </ul>
+          <p class="mt-3">For these purposes, always use certified instruments and consult qualified professionals.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">3. No Warranty</h2>
+          <p>The Site and all content are provided <strong class="text-white">"as is"</strong> without warranty of any kind, express or implied. To the maximum extent permitted by applicable law, we disclaim all warranties including but not limited to implied warranties of merchantability, fitness for a particular purpose, accuracy, and non-infringement.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">4. Limitation of Liability</h2>
+          <p>In no event shall Omni Converter or its operators be liable for any direct, indirect, incidental, special, or consequential damages arising from the use of, or inability to use, any conversion result, content, or feature provided by this Site — even if advised of the possibility of such damages.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">5. AI-Assisted Content</h2>
+          <p>Some descriptive content on this website — including unit descriptions, conversion context, and educational text — may have been drafted with the assistance of AI language tools. All such content is reviewed and edited by human contributors before publication. Our goal is to provide helpful, accurate, and easy-to-understand information. If you identify an error in any descriptive content, please let us know.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">6. External Links</h2>
+          <p>The Site may contain links to external websites or resources. These links are provided for your convenience only. We have no control over the content of external sites and accept no responsibility for them or for any loss or damage that may arise from your use of them.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">7. Advertising</h2>
+          <p>Omni Converter displays third-party advertisements to support the free service. We do not endorse the products or services advertised. Advertisements are clearly distinct from editorial content and are served by independent ad networks. We are not responsible for the accuracy of advertising claims.</p>
+        </div>
+
+        <div class="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-white font-medium mb-1">Related legal pages</p>
+            <p class="text-gray-500 text-xs">Read our Terms of Use and Privacy Policy for more information.</p>
+          </div>
+          <div class="flex gap-3">
+            <a href="/terms" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Terms of Use</a>
+            <a href="/privacy" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Privacy Policy</a>
           </div>
         </div>
 
@@ -1897,7 +2123,7 @@ function renderLandingPage() {
           <a href="/weight" class="group rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-600/10 to-violet-600/5 p-4 sm:p-5 text-left hover:border-indigo-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center mb-3 group-hover:bg-indigo-500/25 transition-colors"><i class="fa-solid fa-weight-hanging text-indigo-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Weight / Mass</p><p class="text-xs text-indigo-400">80+ units active</p></a>
           <a href="/temperature" class="group rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-600/10 to-orange-600/5 p-4 sm:p-5 text-left hover:border-rose-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center mb-3 group-hover:bg-rose-500/25 transition-colors"><i class="fa-solid fa-temperature-half text-rose-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Temperature</p><p class="text-xs text-rose-400">6 units active</p></a>
           <a href="/speed" class="group rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-600/10 to-blue-600/5 p-4 sm:p-5 text-left hover:border-cyan-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center mb-3 group-hover:bg-cyan-500/25 transition-colors"><i class="fa-solid fa-gauge-high text-cyan-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Speed</p><p class="text-xs text-cyan-400">30+ units active</p></a>
-          <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-clock text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Time</p><p class="text-xs text-gray-700">Coming soon</p></div>
+          <a href="/time" class="group rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/10 to-indigo-600/5 p-4 sm:p-5 text-left hover:border-violet-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mb-3 group-hover:bg-violet-500/25 transition-colors"><i class="fa-solid fa-clock text-violet-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Time</p><p class="text-xs text-violet-400">35+ units active</p></a>
           <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-compress-arrows-alt text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Pressure</p><p class="text-xs text-gray-700">Coming soon</p></div>
           <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-bolt text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Energy</p><p class="text-xs text-gray-700">Coming soon</p></div>
           <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-hard-drive text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Data Storage</p><p class="text-xs text-gray-700">Coming soon</p></div>
@@ -4476,6 +4702,629 @@ function scpCopy(){const val=document.getElementById('scp-to').value;if(!val||va
 function scpSwap(){navigate('/speed/'+slug(window._scpTo)+'-to-'+slug(window._scpFrom));}
 
 // ================================================================
+//  TIME DATA
+//  Base unit: second [s]
+//  factor = number of seconds in 1 unit
+// ================================================================
+const TIME_UNITS = [
+  // COMMON
+  { key:'second',              label:'Second',                        symbol:'s',    factor:1,                   group:'common' },
+  { key:'millisecond',         label:'Millisecond',                   symbol:'ms',   factor:0.001,               group:'common' },
+  { key:'microsecond',         label:'Microsecond',                   symbol:'µs',   factor:1e-6,                group:'common' },
+  { key:'nanosecond',          label:'Nanosecond',                    symbol:'ns',   factor:1e-9,                group:'common' },
+  { key:'minute',              label:'Minute',                        symbol:'min',  factor:60,                  group:'common' },
+  { key:'hour',                label:'Hour',                          symbol:'h',    factor:3600,                group:'common' },
+  { key:'day',                 label:'Day',                           symbol:'d',    factor:86400,               group:'common' },
+  { key:'week',                label:'Week',                          symbol:'',     factor:604800,              group:'common' },
+  { key:'month',               label:'Month',                         symbol:'',     factor:2628000,             group:'common' },
+  { key:'year',                label:'Year',                          symbol:'y',    factor:31557600,            group:'common' },
+  // EXTENDED
+  { key:'decade',              label:'Decade',                        symbol:'',     factor:315576000,           group:'extended' },
+  { key:'century',             label:'Century',                       symbol:'',     factor:3155760000,          group:'extended' },
+  { key:'millennium',          label:'Millennium',                    symbol:'',     factor:31557600000,         group:'extended' },
+  { key:'fortnight',           label:'Fortnight',                     symbol:'',     factor:1209600,             group:'extended' },
+  { key:'septennial',          label:'Septennial',                    symbol:'',     factor:220752000,           group:'extended' },
+  { key:'octennial',           label:'Octennial',                     symbol:'',     factor:252288000,           group:'extended' },
+  { key:'novennial',           label:'Novennial',                     symbol:'',     factor:283824000,           group:'extended' },
+  { key:'quinquennial',        label:'Quinquennial',                  symbol:'',     factor:157680000,           group:'extended' },
+  { key:'quindecennial',       label:'Quindecennial',                 symbol:'',     factor:473040000,           group:'extended' },
+  // SCIENTIFIC / SMALL
+  { key:'picosecond',          label:'Picosecond',                    symbol:'ps',   factor:1e-12,               group:'scientific' },
+  { key:'femtosecond',         label:'Femtosecond',                   symbol:'fs',   factor:1e-15,               group:'scientific' },
+  { key:'attosecond',          label:'Attosecond',                    symbol:'as',   factor:1e-18,               group:'scientific' },
+  { key:'shake',               label:'Shake',                         symbol:'',     factor:1e-8,                group:'scientific' },
+  { key:'planck_time',         label:'Planck Time',                   symbol:'tₚ',   factor:5.39056e-44,         group:'scientific' },
+  // ASTRONOMICAL / SIDEREAL
+  { key:'year_julian',         label:'Year (Julian)',                  symbol:'',     factor:31557600,            group:'astronomical' },
+  { key:'year_leap',           label:'Year (Leap)',                    symbol:'',     factor:31622400,            group:'astronomical' },
+  { key:'year_tropical',       label:'Year (Tropical)',                symbol:'',     factor:31556930,            group:'astronomical' },
+  { key:'year_sidereal',       label:'Year (Sidereal)',                symbol:'',     factor:31558149.54,         group:'astronomical' },
+  { key:'month_synodic',       label:'Month (Synodic)',                symbol:'',     factor:2551443.84,          group:'astronomical' },
+  { key:'day_sidereal',        label:'Day (Sidereal)',                 symbol:'',     factor:86164.09,            group:'astronomical' },
+  { key:'hour_sidereal',       label:'Hour (Sidereal)',                symbol:'',     factor:3590.1704166667,     group:'astronomical' },
+  { key:'minute_sidereal',     label:'Minute (Sidereal)',              symbol:'',     factor:59.8361736111,       group:'astronomical' },
+  { key:'second_sidereal',     label:'Second (Sidereal)',              symbol:'',     factor:0.9972695602,        group:'astronomical' },
+];
+
+const TIME_UNIT_DESC = {
+  second:           { short:'The SI base unit of time; defined by cesium-133 atom transitions.', long:'The second (symbol: s) is the base unit of time in the International System of Units (SI). Since 1967 it has been defined as the duration of 9,192,631,770 periods of the radiation corresponding to the transition between two hyperfine levels of the ground state of the cesium-133 atom. Almost all time measurements in science and technology are ultimately expressed in seconds.' },
+  millisecond:      { short:'One thousandth of a second (10⁻³ s); used in computing and sports timing.', long:'The millisecond (symbol: ms) equals one thousandth of a second (0.001 s). It is widely used in computing (network latency, response times), sports timing (race results), music production (delay effects), and medical measurements such as ECG intervals. A typical human reaction time is around 150–300 ms.' },
+  microsecond:      { short:'One millionth of a second (10⁻⁶ s); used in electronics and radio.', long:'The microsecond (symbol: µs) equals one millionth of a second (0.000001 s). It is used in radio frequency engineering, radar systems, CPU instruction cycle times, and high-speed electronics. A microwave oven cycle is typically about 1 µs; GPS satellites use microsecond-precision timing.' },
+  nanosecond:       { short:'One billionth of a second (10⁻⁹ s); the scale of CPU clock cycles.', long:'The nanosecond (symbol: ns) equals one billionth of a second (10⁻⁹ s). Modern CPU clock speeds operate in nanoseconds — a 3 GHz processor executes roughly one clock cycle every 0.33 ns. Light travels about 30 centimetres in 1 nanosecond. It is also the scale of RAM access times and networking signal propagation.' },
+  minute:           { short:'60 seconds; the standard subdivision of the hour.', long:'The minute (symbol: min) equals exactly 60 seconds. It is one of the most widely used time units in everyday life, used to measure meeting durations, cooking times, exercise intervals, and schedule segments. The division of the hour into 60 minutes originates from ancient Babylonian sexagesimal (base-60) mathematics.' },
+  hour:             { short:'3,600 seconds; the primary unit for scheduling and time zones.', long:'The hour (symbol: h) equals exactly 3,600 seconds or 60 minutes. It is the standard unit for scheduling, working hours, travel times, and time-zone offsets. The 24-hour day originates from ancient Egyptian and Greek astronomy, which divided day and night into 12 equal parts each. The hour is not an SI unit but is accepted for use with SI.' },
+  day:              { short:'86,400 seconds; one full Earth rotation relative to the Sun.', long:'The day (symbol: d) equals 24 hours or 86,400 seconds. A solar day is defined as the time it takes Earth to rotate once relative to the Sun. It is the fundamental unit of civil timekeeping, calendar systems, and biological circadian rhythms. The exact length of a solar day varies slightly throughout the year; a mean solar day equals exactly 86,400 SI seconds by convention.' },
+  week:             { short:'7 days; a unit of civil time rooted in ancient calendrical traditions.', long:'The week is a time period of exactly 7 days (604,800 seconds). Its origins are disputed but are often linked to ancient Mesopotamian and biblical traditions, and later to the seven classical celestial bodies known to ancient astronomers (Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn). The 7-day week is now universally used across almost all calendar systems worldwide.' },
+  month:            { short:'~30.44 days on average; one twelfth of a Gregorian year.', long:"The month (symbol: mo) is a unit of time based on the motion of the Moon and is approximately 1/12 of a year. The Gregorian calendar month ranges from 28 to 31 days. For conversion purposes, 1 mean month is taken as 30.4375 days (365.25/12), which equals exactly 2,628,000 seconds. Months are fundamental to nearly all agricultural, financial, and administrative calendars." },
+  year:             { short:'~365.25 days; the time for Earth to orbit the Sun once.', long:"The year (symbol: y or yr) is the orbital period of Earth around the Sun. The Julian year, used as the basis for most astronomical conversions, is defined as exactly 365.25 days = 31,557,600 seconds. The Gregorian civil year averages 365.2425 days. Leap years (366 days) occur every 4 years (with century exceptions) to keep the calendar aligned with Earth's orbit." },
+  decade:           { short:'10 years; used for generational and historical time periods.', long:"A decade equals exactly 10 years (based on the Julian year, 315,576,000 seconds). The term comes from the Greek deka (ten). Decades are commonly used in popular culture and journalism to describe generational periods (e.g., 'the 1980s') and in economics for medium-term trend analysis." },
+  century:          { short:'100 years; a standard unit for historical periods.', long:"A century equals exactly 100 years (3,155,760,000 seconds based on the Julian year). It is the standard unit for historical periodisation — historians speak of the 19th century (1801–1900) or the 21st century (2001–2100). The word comes from the Latin centum (hundred)." },
+  millennium:       { short:'1,000 years; used in geology, archaeology, and long-range planning.', long:"A millennium equals exactly 1,000 years (31,557,600,000 seconds based on the Julian year). It is used in archaeology (the Bronze Age spans roughly 2 millennia), geology, and long-term climate science. The most recently completed millennium ended on 31 December 2000." },
+  fortnight:        { short:'14 days (2 weeks); common in British English and some payroll cycles.', long:"A fortnight equals exactly 14 days or 2 weeks (1,209,600 seconds). The word is derived from the Old English fēowertīene niht ('fourteen nights'). Fortnights are used in British Commonwealth countries for pay cycles, magazine publication schedules, and informal time references. Australia and New Zealand still commonly use the term in everyday speech." },
+  septennial:       { short:'7 years; used in law and historical periodisation.', long:"A septennial is a period of 7 years (220,752,000 seconds using a Julian year of 365.25 days). The term comes from Latin septem (seven) + annus (year). It appears in British constitutional law (the Septennial Act of 1716 set the maximum term of Parliament at 7 years) and in some ecclesiastical and academic contexts." },
+  octennial:        { short:'8 years; used in some electoral and legal cycles.', long:"An octennial is a period of 8 years (252,288,000 seconds). The term comes from Latin octo (eight) + annus (year). It is used in historical and legal contexts; notably, the US presidential election cycle completes two 4-year terms in one octennial. Some ancient Greek games ran on an octennial cycle (oktaeteris)." },
+  novennial:        { short:'9 years; a rare but recognised period in legal and religious contexts.', long:"A novennial is a period of 9 years (283,824,000 seconds). From Latin novem (nine) + annus (year). Novenial periods appear in some medieval religious calendars, legal statutes on property possession, and anniversary commemorations. It is rarely used in everyday modern speech." },
+  quinquennial:     { short:'5 years; used in business, government, and planning cycles.', long:"A quinquennial is a period of 5 years (157,680,000 seconds). From Latin quinque (five) + annus (year). Quinquennial reviews are standard in many government departments, international organisations, and professional bodies. The United Nations World Population Prospects is published on a quinquennial basis." },
+  quindecennial:    { short:'15 years; used in some anniversary and census contexts.', long:"A quindecennial is a period of 15 years (473,040,000 seconds). From Latin quindecim (fifteen) + annus (year). It is used to mark significant anniversaries (e.g., a 15th wedding anniversary is called a crystal or quindecennial anniversary) and in some census and planning cycles." },
+  picosecond:       { short:'10⁻¹² s; the scale of laser pulses and ultrafast spectroscopy.', long:"The picosecond (symbol: ps) equals 10⁻¹² seconds (one trillionth of a second). Ultrashort laser pulses operate in the picosecond range. It is used in ultrafast spectroscopy, optical communications (fibre-optic data pulses), and studies of molecular vibrations. Light travels approximately 0.3 mm in 1 ps." },
+  femtosecond:      { short:'10⁻¹⁵ s; the timescale of electron dynamics in atoms and molecules.', long:"The femtosecond (symbol: fs) equals 10⁻¹⁵ seconds (one quadrillionth of a second). Femtosecond lasers are used in ultrafast spectroscopy to observe chemical reactions and electron dynamics in real time — the field of femtochemistry was awarded the 1999 Nobel Prize in Chemistry. Light travels about 300 nm in 1 fs." },
+  attosecond:       { short:'10⁻¹⁸ s; the shortest measurable time interval; electron motion timescale.', long:"The attosecond (symbol: as) equals 10⁻¹⁸ seconds (one quintillionth of a second). It is the smallest time unit that has been directly measured. Attosecond pulses of light allow scientists to observe and control electron motion inside atoms. The 2023 Nobel Prize in Physics was awarded for experiments generating and using attosecond pulses. Light travels about 0.3 nm in 1 as." },
+  shake:            { short:'10 nanoseconds (10⁻⁸ s); used informally in nuclear physics.', long:"A shake is an informal unit of time equal to 10 nanoseconds (10⁻⁸ seconds). It is used in nuclear physics and weapon design, where the characteristic time for a nuclear chain reaction is measured in shakes. The name is derived from the phrase 'two shakes of a lamb's tail,' meaning a very short time. One shake equals 10 nanoseconds." },
+  planck_time:      { short:'≈5.39 × 10⁻⁴⁴ s; the smallest meaningful unit of time in physics.', long:"The Planck time (symbol: tₚ) is approximately 5.391 × 10⁻⁴⁴ seconds. It is the time required for light to travel one Planck length (≈1.616 × 10⁻³⁵ m) in a vacuum. It is considered the smallest interval of time that has any physical meaning within current theories of quantum gravity. Below the Planck time, the classical concepts of space and time cease to be meaningful." },
+  year_julian:      { short:'365.25 days exactly (31,557,600 s); the standard astronomical year.', long:"The Julian year is defined as exactly 365.25 days = 31,557,600 seconds. It was introduced by Julius Caesar in 46 BC and was the standard calendar year until the Gregorian reform of 1582. In astronomy, it remains the standard basis for light-years and other stellar distance calculations. 1 light-year = distance light travels in 1 Julian year." },
+  year_leap:        { short:'366 days (31,622,400 s); a calendar year with an extra day in February.', long:"A leap year contains 366 days instead of 365, with the extra day (29 February) inserted to keep the Gregorian calendar aligned with Earth's orbit around the Sun. Leap years occur in years divisible by 4, except for century years not divisible by 400 (e.g., 1900 was not a leap year, but 2000 was). 1 leap year = 31,622,400 seconds." },
+  year_tropical:    { short:'≈365.2422 days; the true solar year — one complete cycle of Earth's seasons.', long:"The tropical year (also called the solar year) is the time for Earth to complete one full cycle of seasons — from one vernal equinox to the next — approximately 365.24219 days (31,556,930 seconds). It is the basis for the Gregorian calendar reform and is slightly shorter than the Julian year by about 11 minutes per year. The accumulated difference is why the Gregorian calendar skips some century leap years." },
+  year_sidereal:    { short:'≈365.256 days; Earth\'s orbital period relative to distant stars.', long:"The sidereal year is the time it takes Earth to complete one full orbit around the Sun relative to distant stars, approximately 365.25636 days (31,558,149.54 seconds). It differs from the tropical year by about 20 minutes due to the precession of Earth's rotational axis (the 'precession of the equinoxes'). The sidereal year is used in astronomy for precise orbital calculations." },
+  month_synodic:    { short:'≈29.53 days; one complete cycle of Moon phases (new moon to new moon).', long:"The synodic month (also called the lunar month) is the time between successive new moons — approximately 29.53059 days (2,551,443.84 seconds). It governs the lunar calendar systems used in Islamic, Hebrew, and lunisolar calendars. The synodic month is slightly longer than the sidereal month (27.32 days) because Earth has moved in its orbit around the Sun during that time, requiring the Moon to travel a bit further to realign with the Sun." },
+  day_sidereal:     { short:'≈23 h 56 min 4 s; Earth\'s rotation period relative to distant stars.', long:"A sidereal day is the time it takes Earth to rotate once relative to distant stars — approximately 23 hours, 56 minutes, and 4.09 seconds (86,164.09 seconds). It is about 4 minutes shorter than a mean solar day (86,400 s) because Earth also moves along its orbit, requiring a slight extra rotation for the Sun to return to the same position in the sky. Astronomers use the sidereal day to aim telescopes at fixed stars." },
+  hour_sidereal:    { short:'1/24 of a sidereal day ≈ 3,590.17 s; used in astronomy.', long:"A sidereal hour is 1/24 of a sidereal day, equal to approximately 3,590.17 seconds (about 59 minutes and 50 seconds). It is used in astronomy as part of the right ascension coordinate system, where the sky is divided into 24 hours of right ascension that sweep past a fixed point on Earth in exactly one sidereal day." },
+  minute_sidereal:  { short:'1/60 of a sidereal hour ≈ 59.836 s; used in astronomical coordinates.', long:"A sidereal minute equals 1/60 of a sidereal hour, approximately 59.836 seconds. Like the sidereal hour, it appears in the right ascension coordinate system used by astronomers to locate objects on the celestial sphere. Because a sidereal day is shorter than a solar day, a sidereal minute is slightly shorter than a civil minute." },
+  second_sidereal:  { short:'1/60 of a sidereal minute ≈ 0.9973 s; slightly shorter than an SI second.', long:"A sidereal second equals 1/60 of a sidereal minute, approximately 0.99727 SI seconds. The sidereal second is the finest division of sidereal time and appears in precise astronomical time calculations. Since the sidereal day is about 3 minutes 56 seconds shorter than the solar day, each sidereal unit of time is proportionally shorter than its solar counterpart." },
+};
+
+const TIME_GROUP_META = {
+  common:       { label:'Common',       color:'bg-violet-500/15 text-violet-400',  icon:'fa-clock' },
+  extended:     { label:'Extended',     color:'bg-indigo-500/15 text-indigo-400',  icon:'fa-calendar' },
+  scientific:   { label:'Scientific',   color:'bg-cyan-500/15 text-cyan-400',      icon:'fa-atom' },
+  astronomical: { label:'Astronomical', color:'bg-amber-500/15 text-amber-400',    icon:'fa-star' },
+};
+
+function getTimeUnit(key) { return TIME_UNITS.find(u => u.key === key); }
+
+function convertTime(value, fromKey, toKey) {
+  const from = getTimeUnit(fromKey);
+  const to   = getTimeUnit(toKey);
+  if (!from || !to || !isFinite(value)) return NaN;
+  return (value * from.factor) / to.factor;
+}
+
+// ================================================================
+//  TIME CONVERTER PAGE STATE
+// ================================================================
+let tmFromKey = 'hour';
+let tmToKey   = 'minute';
+let tmGroup   = 'all';
+
+function renderTimePage() {
+  updateNavActive('time');
+  updateSEO({
+    title: 'Time Converter — 35+ Units | Omni Converter',
+    description: 'Free online time converter. Convert between 35+ units including seconds, minutes, hours, days, weeks, months, years, and scientific time units. Instant results.',
+    url: 'https://www.omniconverter.cyou/time'
+  });
+  const root = document.getElementById('app-root');
+  root.innerHTML = `
+    <div class="page-fade">
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-2 justify-between">
+          <span class="inline-flex items-center gap-1.5 text-xs font-medium text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-clock text-xs"></i> Time
+          </span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Time Converter</h2>
+        <p class="text-gray-500 text-sm mt-1">Convert between 35+ time units — common, extended, scientific &amp; astronomical.</p>
+      </div>
+
+      <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From</label>
+            <div class="relative">
+              <input id="tm-from-value" type="text" inputmode="decimal" value="1" step="any"
+                class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-violet-500/30"
+                placeholder="Enter value" oninput="tmConvert()" />
+              <button onclick="tmClear()" id="tm-clear-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 transition-colors hidden">
+                <i class="fa-solid fa-xmark text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From Unit</label>
+            <div id="tm-from-wrap">
+              <button id="tm-from-btn" onclick="tmToggleDrop('from')"
+                class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-violet-500/30 transition-all">
+                <span id="tm-from-label"></span>
+                <i class="fa-solid fa-chevron-down text-violet-400 text-xs transition-transform duration-200" id="tm-from-chev"></i>
+              </button>
+              <div id="tm-from-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+                <div class="p-2 border-b border-white/5"><input id="tm-from-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-violet-500/40" oninput="tmBuildList('from')" /></div>
+                <div id="tm-from-list" class="search-dropdown py-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center my-4">
+          <button onclick="tmSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600/15 border border-violet-500/25 text-violet-400 text-sm font-medium hover:bg-violet-600/25 hover:border-violet-500/50 transition-all">
+            <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap Units
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To</label>
+            <div class="relative">
+              <input id="tm-to-value" type="text" readonly
+                class="converter-input w-full bg-dark-800/60 border border-white/8 rounded-xl px-4 py-3 text-xl font-semibold text-violet-300 font-mono cursor-default" placeholder="Result" />
+              <button onclick="tmCopy()" title="Copy result" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-violet-400 transition-colors">
+                <i class="fa-regular fa-copy text-sm" id="tm-copy-icon"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To Unit</label>
+            <div id="tm-to-wrap">
+              <button id="tm-to-btn" onclick="tmToggleDrop('to')"
+                class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-violet-500/30 transition-all">
+                <span id="tm-to-label"></span>
+                <i class="fa-solid fa-chevron-down text-violet-400 text-xs transition-transform duration-200" id="tm-to-chev"></i>
+              </button>
+              <div id="tm-to-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+                <div class="p-2 border-b border-white/5"><input id="tm-to-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-violet-500/40" oninput="tmBuildList('to')" /></div>
+                <div id="tm-to-list" class="search-dropdown py-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-xs text-gray-500">
+          <i class="fa-solid fa-function text-violet-500/60 flex-shrink-0"></i>
+          <span id="tm-formula-text" class="font-mono truncate"></span>
+        </div>
+      </div>
+
+      <!-- UNITS GRID -->
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+        <div class="p-4 sm:p-5 border-b border-white/5 flex flex-wrap items-center justify-between gap-3">
+          <div><h2 class="text-base font-semibold text-white">All Time Units</h2><p class="text-xs text-gray-600 mt-0.5">Click any unit to open its dedicated converter page</p></div>
+          <div class="flex flex-wrap gap-1.5" id="tm-group-tabs">
+            <button onclick="tmFilterGroup('all')" data-group="all" class="tmgtab active text-xs font-medium px-3 py-1.5 rounded-lg bg-violet-600/20 text-violet-400 border border-violet-500/30 transition-all">All</button>
+            <button onclick="tmFilterGroup('common')" data-group="common" class="tmgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Common</button>
+            <button onclick="tmFilterGroup('extended')" data-group="extended" class="tmgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Extended</button>
+            <button onclick="tmFilterGroup('scientific')" data-group="scientific" class="tmgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Scientific</button>
+            <button onclick="tmFilterGroup('astronomical')" data-group="astronomical" class="tmgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Astronomical</button>
+          </div>
+        </div>
+        <div class="px-4 sm:px-5 py-3 border-b border-white/5">
+          <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-xs"></i>
+            <input id="tm-unit-grid-search" type="text" placeholder="Search units…"
+              class="w-full bg-dark-800/60 rounded-lg pl-8 pr-4 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-violet-500/30 transition-colors"
+              oninput="tmRenderGrid()" />
+          </div>
+        </div>
+        <div class="p-4 sm:p-5">
+          <div id="tm-unit-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+          <p class="text-xs text-gray-600 mt-3" id="tm-grid-count"></p>
+        </div>
+      </div>
+
+      <!-- QUICK REF TABLE -->
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+        <div class="p-4 sm:p-5 border-b border-white/5"><h2 class="text-base font-semibold text-white">Quick Reference Table</h2><p class="text-xs text-gray-600 mt-0.5">All conversions relative to your current input</p></div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="border-b border-white/5">
+              <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Unit</th>
+              <th class="text-left px-3 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Group</th>
+              <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Value</th>
+              <th class="px-3 py-3 w-10"></th>
+            </tr></thead>
+            <tbody id="tm-ref-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('tm-from-label').textContent = tmUnitLabel(getTimeUnit(tmFromKey));
+  document.getElementById('tm-to-label').textContent   = tmUnitLabel(getTimeUnit(tmToKey));
+  tmConvert(); tmRenderGrid(); tmRenderTable(); tmInitOutsideClick();
+}
+
+function tmUnitLabel(u) { return u.label + (u.symbol ? ' [' + u.symbol + ']' : ''); }
+
+function tmConvert() {
+  const raw = parseFloat(document.getElementById('tm-from-value').value);
+  const val = isNaN(raw) ? 0 : raw;
+  document.getElementById('tm-to-value').value = fmtNum(convertTime(val, tmFromKey, tmToKey));
+  document.getElementById('tm-formula-text').textContent = `1 ${getTimeUnit(tmFromKey).label} = ${fmtNum(convertTime(1, tmFromKey, tmToKey))} ${getTimeUnit(tmToKey).label}`;
+  const cb = document.getElementById('tm-clear-btn');
+  if (cb) cb.classList.toggle('hidden', !document.getElementById('tm-from-value').value);
+  tmRenderTable();
+}
+function tmClear() { document.getElementById('tm-from-value').value=''; document.getElementById('tm-from-value').focus(); tmConvert(); }
+function tmCopy() {
+  const val=document.getElementById('tm-to-value').value; if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});
+  const icon=document.getElementById('tm-copy-icon'); icon.className='fa-solid fa-circle-check text-emerald-400 text-sm';
+  showToast('Result copied to clipboard'); setTimeout(()=>{icon.className='fa-regular fa-copy text-sm';},2000);
+}
+function tmSwap() {
+  const t=tmFromKey; tmFromKey=tmToKey; tmToKey=t;
+  document.getElementById('tm-from-label').textContent=tmUnitLabel(getTimeUnit(tmFromKey));
+  document.getElementById('tm-to-label').textContent=tmUnitLabel(getTimeUnit(tmToKey));
+  const tv=document.getElementById('tm-to-value').value;
+  if(tv&&tv!=='—')document.getElementById('tm-from-value').value=tv;
+  tmConvert(); tmRenderGrid();
+}
+function tmToggleDrop(side) {
+  const drop=document.getElementById('tm-'+side+'-drop'), chev=document.getElementById('tm-'+side+'-chev');
+  const isOpen=drop.classList.contains('open');
+  ['from','to'].forEach(s=>{document.getElementById('tm-'+s+'-drop').classList.remove('open');document.getElementById('tm-'+s+'-chev').classList.remove('rotate-180');const si=document.getElementById('tm-'+s+'-search');if(si)si.value='';});
+  if(!isOpen){drop.classList.add('open');chev.classList.add('rotate-180');tmBuildList(side);setTimeout(()=>document.getElementById('tm-'+side+'-search').focus(),50);}
+}
+function tmBuildList(side) {
+  const q=(document.getElementById('tm-'+side+'-search').value||'').toLowerCase();
+  const con=document.getElementById('tm-'+side+'-list'); con.innerHTML='';
+  const groups=['common','extended','scientific','astronomical']; const grouped={}; groups.forEach(g=>grouped[g]=[]);
+  TIME_UNITS.filter(u=>!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)).forEach(u=>{if(grouped[u.group])grouped[u.group].push(u);});
+  let any=false;
+  groups.forEach(g=>{if(!grouped[g].length)return;any=true;
+    const meta=TIME_GROUP_META[g];const hd=document.createElement('div');hd.className='px-3 pt-2 pb-1';
+    hd.innerHTML=`<span class="text-xs font-semibold uppercase tracking-widest ${meta.color.split(' ')[1]} opacity-70">${meta.label}</span>`;con.appendChild(hd);
+    grouped[g].forEach(u=>{const cur=(side==='from'?tmFromKey:tmToKey)===u.key;
+      const btn=document.createElement('button');btn.className=`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-violet-500/10 ${cur?'text-violet-400 bg-violet-500/8 font-medium':'text-gray-300'}`;
+      btn.textContent=tmUnitLabel(u);btn.onclick=()=>tmSelectUnit(side,u.key);con.appendChild(btn);});});
+  if(!any)con.innerHTML='<div class="px-3 py-4 text-sm text-gray-600 text-center">No units found</div>';
+}
+function tmSelectUnit(side,key){
+  if(side==='from'){tmFromKey=key;document.getElementById('tm-from-label').textContent=tmUnitLabel(getTimeUnit(key));}
+  else{tmToKey=key;document.getElementById('tm-to-label').textContent=tmUnitLabel(getTimeUnit(key));}
+  document.getElementById('tm-'+side+'-drop').classList.remove('open');document.getElementById('tm-'+side+'-chev').classList.remove('rotate-180');
+  tmConvert();tmRenderGrid();
+}
+function tmFilterGroup(g){
+  tmGroup=g;
+  document.querySelectorAll('.tmgtab').forEach(b=>{const a=b.dataset.group===g;
+    b.className=a?'tmgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-violet-600/20 text-violet-400 border border-violet-500/30 transition-all'
+    :'tmgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all';});
+  tmRenderGrid();
+}
+function tmRenderGrid(){
+  const q=(document.getElementById('tm-unit-grid-search')?.value||'').toLowerCase();
+  const units=TIME_UNITS.filter(u=>(tmGroup==='all'||u.group===tmGroup)&&(!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)));
+  const grid=document.getElementById('tm-unit-grid');
+  const val=parseFloat(document.getElementById('tm-from-value')?.value)||1;
+  grid.innerHTML=units.map(u=>{const meta=TIME_GROUP_META[u.group];const result=convertTime(val,tmFromKey,u.key);const desc=TIME_UNIT_DESC[u.key];
+    return `<a href="/time/${slug(u.key)}" class="unit-card text-left p-3 rounded-xl border border-white/6 bg-dark-800/40 transition-all duration-200 group">
+      <div class="flex items-start justify-between mb-1.5"><span class="text-sm font-medium text-gray-200 group-hover:text-white transition-colors leading-tight">${u.label}</span>
+      <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-xs ${meta.color} ml-2 flex-shrink-0">${u.symbol||meta.label.slice(0,3)}</span></div>
+      <p class="text-xs text-gray-600 leading-relaxed mb-2 line-clamp-1">${desc?desc.short:''}</p>
+      <div class="flex items-center justify-between"><span class="font-mono text-xs text-violet-300">${fmtNum(result)} ${u.symbol||''}</span>
+      <span class="text-xs text-violet-500/60 group-hover:text-violet-400 transition-colors">View page <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></span></div></a>`;}).join('');
+  const cnt=document.getElementById('tm-grid-count');if(cnt)cnt.textContent=`Showing ${units.length} unit${units.length!==1?'s':''}`;
+}
+function tmRenderTable(){
+  const val=parseFloat(document.getElementById('tm-from-value')?.value)||0;
+  const tbody=document.getElementById('tm-ref-table');if(!tbody)return;
+  tbody.innerHTML=TIME_UNITS.map(u=>{const result=convertTime(val,tmFromKey,u.key);const meta=TIME_GROUP_META[u.group];const isFrom=u.key===tmFromKey;
+    return `<tr class="result-row border-b border-white/3 transition-colors cursor-pointer" onclick="navigate('/time/${slug(u.key)}')">
+      <td class="px-4 sm:px-5 py-2.5"><div class="flex items-center gap-2">${isFrom?'<i class="fa-solid fa-arrow-right text-violet-400 text-xs"></i>':''}<span class="text-sm text-gray-200 ${isFrom?'font-semibold text-violet-300':''}">${u.label}${u.symbol?' ['+u.symbol+']':''}</span></div></td>
+      <td class="px-3 py-2.5 hidden sm:table-cell"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${meta.color}">${meta.label}</span></td>
+      <td class="px-4 sm:px-5 py-2.5 text-right"><span class="font-mono text-sm ${isFrom?'text-violet-300 font-semibold':'text-gray-300'}">${fmtNum(result)}</span></td>
+      <td class="px-3 py-2.5"><i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-700 hover:text-violet-400 transition-colors"></i></td>
+    </tr>`;}).join('');
+}
+function tmInitOutsideClick(){
+  document.addEventListener('click',function handler(e){
+    if(!document.getElementById('tm-from-wrap')&&!document.getElementById('tm-to-wrap')){document.removeEventListener('click',handler);return;}
+    ['from','to'].forEach(s=>{const w=document.getElementById('tm-'+s+'-wrap'),d=document.getElementById('tm-'+s+'-drop');
+      if(w&&d&&!w.contains(e.target)){d.classList.remove('open');const c=document.getElementById('tm-'+s+'-chev');if(c)c.classList.remove('rotate-180');}});});
+}
+
+// ================================================================
+//  TIME UNIT DETAIL PAGE
+// ================================================================
+let tmUnitFromKey='';
+let tmUnitToKey='';
+let tmUnitConvGroup='all';
+
+function renderTimeUnitPage(key){
+  updateNavActive('time');
+  const unit=getTimeUnit(key);if(!unit){navigate('/time');return;}
+  const desc=TIME_UNIT_DESC[key]||{short:`Unit of time: ${unit.label}`,long:`The ${unit.label} is a unit of time.`};
+  const meta=TIME_GROUP_META[unit.group];
+  const related=TIME_UNITS.filter(u=>u.group===unit.group&&u.key!==key).slice(0,6);
+  tmUnitFromKey=key;
+  tmUnitToKey=TIME_UNITS.find(u=>u.key!==key)?.key||'minute';
+  updateSEO({title:`${unit.label} Converter | Omni Converter`,description:`Convert ${unit.label}${unit.symbol?' ('+unit.symbol+')':''} to other time units. ${desc.short}`,url:`https://www.omniconverter.cyou/time/${slug(key)}`});
+  const root=document.getElementById('app-root');
+  root.innerHTML=`<div class="page-fade">
+    <nav class="flex items-center gap-2 text-xs text-gray-600 mb-5">
+      <button onclick="navigate('/')" class="hover:text-violet-400 transition-colors">Omni Converter</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/time')" class="hover:text-violet-400 transition-colors">Time</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <span class="text-gray-400">${unit.label}</span>
+    </nav>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/50 backdrop-blur-sm p-5 sm:p-7 mb-6">
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+        <div><div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${meta.color} border border-current/20"><i class="fa-solid ${meta.icon} mr-1.5 text-xs"></i>${meta.label}</span>
+          ${unit.symbol?`<span class="font-mono text-xs text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded">${unit.symbol}</span>`:''}
+        </div><h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-1">${unit.label} Converter</h2><p class="text-gray-400 text-sm leading-relaxed max-w-xl">${desc.short}</p></div>
+        <div class="text-right"><p class="text-xs text-gray-600 mb-1">In seconds</p><p class="font-mono text-lg text-violet-300 font-semibold">${unit.factor<1e-10||unit.factor>1e9?unit.factor.toExponential(6):fmtNum(unit.factor)} s</p></div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/5">
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">In seconds</p><p class="font-mono text-xs text-white truncate">${unit.factor<1e-10||unit.factor>1e9?unit.factor.toExponential(4):fmtNum(unit.factor)}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">Category</p><p class="text-xs text-white">${meta.label}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">Symbol</p><p class="font-mono text-xs text-white">${unit.symbol||'—'}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">In minutes</p><p class="font-mono text-xs text-white truncate">${fmtNum(convertTime(1,key,'minute'))}</p></div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-violet-400 mr-2"></i>Quick Converter</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From (${unit.label})</label>
+          <div class="relative"><input id="tmu-from-val" type="text" inputmode="decimal" value="1" step="any"
+            class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-violet-500/30"
+            placeholder="Enter value" oninput="tmuConvert()" />
+            ${unit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-violet-400 font-mono text-sm">${unit.symbol}</span>`:''}
+          </div>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To Unit</label>
+          <div id="tmu-to-wrap"><button id="tmu-to-btn" onclick="tmuToggleDrop()"
+            class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-violet-500/30 transition-all">
+            <span id="tmu-to-label"></span><i class="fa-solid fa-chevron-down text-violet-400 text-xs transition-transform duration-200" id="tmu-to-chev"></i></button>
+            <div id="tmu-to-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+              <div class="p-2 border-b border-white/5"><input id="tmu-to-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-violet-500/40" oninput="tmuBuildList()" /></div>
+              <div id="tmu-to-list" class="search-dropdown py-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-dark-800/70 border border-white/8 rounded-xl p-4 mb-3">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-gray-600 uppercase tracking-wider">Result</span>
+          <button onclick="tmuCopy()" class="text-xs text-gray-600 hover:text-violet-400 transition-colors flex items-center gap-1"><i class="fa-regular fa-copy text-xs" id="tmu-copy-icon"></i> Copy</button>
+        </div>
+        <div class="flex items-baseline gap-2 flex-wrap"><span id="tmu-result" class="font-mono text-3xl font-bold text-violet-300 num-shimmer"></span><span id="tmu-result-sym" class="font-mono text-lg text-violet-400/60"></span></div>
+        <p id="tmu-formula" class="text-xs text-gray-600 font-mono mt-2"></p>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="tmuSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600/15 border border-violet-500/25 text-violet-400 text-sm font-medium hover:bg-violet-600/25 transition-all">
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap
+        </button>
+        <button onclick="navigate('/time')" class="flex items-center gap-1.5 text-xs text-gray-600 hover:text-violet-400 transition-colors"><i class="fa-solid fa-table text-xs"></i>All units</button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-3"><i class="fa-solid fa-circle-info text-violet-400 mr-2"></i>About ${unit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">${desc.long}</p>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+      <div class="p-4 sm:p-5 border-b border-white/5 flex flex-wrap items-center justify-between gap-3">
+        <div><h2 class="text-base font-semibold text-white">1 ${unit.label} Equals…</h2><p class="text-xs text-gray-600 mt-0.5">Complete conversion table</p></div>
+        <div class="flex flex-wrap gap-1.5" id="tmu-ct-tabs">
+          <button onclick="tmuFilterGroup('all')" data-group="all" class="tmutab active text-xs font-medium px-3 py-1.5 rounded-lg bg-violet-600/20 text-violet-400 border border-violet-500/30 transition-all">All</button>
+          <button onclick="tmuFilterGroup('common')" data-group="common" class="tmutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Common</button>
+          <button onclick="tmuFilterGroup('extended')" data-group="extended" class="tmutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Extended</button>
+          <button onclick="tmuFilterGroup('scientific')" data-group="scientific" class="tmutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Scientific</button>
+          <button onclick="tmuFilterGroup('astronomical')" data-group="astronomical" class="tmutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Astronomical</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-white/5">
+        <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Unit</th>
+        <th class="text-left px-3 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Symbol</th>
+        <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">1 ${unit.symbol||unit.label} =</th>
+        <th class="px-3 py-3 w-10"></th>
+      </tr></thead><tbody id="tmu-conv-table"></tbody></table></div>
+    </div>
+    ${related.length>0?`<div class="mb-6"><h2 class="text-base font-semibold text-white mb-3"><i class="fa-solid fa-link text-violet-400 mr-2"></i>Related ${meta.label} Units</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        ${related.map(u=>{const r=convertTime(1,key,u.key);return `<a href="/time/${slug(u.key)}" class="unit-card text-left p-3 rounded-xl border border-white/6 bg-dark-800/40 transition-all duration-200 group">
+          <p class="text-xs font-medium text-gray-300 group-hover:text-white transition-colors mb-1 truncate">${u.label}</p>
+          ${u.symbol?`<p class="font-mono text-xs text-violet-400 mb-1">${u.symbol}</p>`:''}
+          <p class="font-mono text-xs text-gray-600">${fmtNum(r)}</p></a>`;}).join('')}
+      </div></div>`:''
+    }
+    <div class="rounded-2xl border border-white/8 bg-dark-700/30 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-1">Convert ${unit.label} to Other Time Units</h2>
+      <p class="text-xs text-gray-600 mb-4">Direct conversion pages</p>
+      <div class="flex flex-wrap gap-2">
+        ${TIME_UNITS.filter(u=>u.key!==key).sort((a,b)=>a.label.localeCompare(b.label)).map(u=>`<a href="/time/${slug(key)}-to-${slug(u.key)}" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-dark-800/60 border border-white/5 text-xs text-gray-400 hover:text-violet-400 hover:border-violet-500/30 transition-all">${unit.label} → ${u.label}</a>`).join('')}
+      </div>
+    </div>
+    ${buildUnitFaqHtml(unit, desc, 'time')}
+  </div>`;
+  document.getElementById('tmu-to-label').textContent=tmUnitLabel(getTimeUnit(tmUnitToKey));
+  tmuRenderConvTable('all'); tmuConvert(); tmuInitOutsideClick();
+}
+
+function tmuConvert(){
+  const raw=parseFloat(document.getElementById('tmu-from-val').value);const val=isNaN(raw)?0:raw;
+  const result=convertTime(val,tmUnitFromKey,tmUnitToKey);const toUnit=getTimeUnit(tmUnitToKey);const frUnit=getTimeUnit(tmUnitFromKey);
+  document.getElementById('tmu-result').textContent=fmtNum(result);document.getElementById('tmu-result-sym').textContent=toUnit.symbol||toUnit.label;
+  document.getElementById('tmu-formula').textContent=`1 ${frUnit.label} = ${fmtNum(convertTime(1,tmUnitFromKey,tmUnitToKey))} ${toUnit.label}`;
+}
+function tmuCopy(){const val=document.getElementById('tmu-result').textContent;if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});const icon=document.getElementById('tmu-copy-icon');
+  icon.className='fa-solid fa-circle-check text-emerald-400 text-xs';showToast('Copied!');setTimeout(()=>{icon.className='fa-regular fa-copy text-xs';},2000);}
+function tmuSwap(){const tmp=tmUnitFromKey;tmUnitFromKey=tmUnitToKey;tmUnitToKey=tmp;
+  const rv=document.getElementById('tmu-result').textContent;if(rv&&rv!=='—')document.getElementById('tmu-from-val').value=rv;
+  document.getElementById('tmu-to-label').textContent=tmUnitLabel(getTimeUnit(tmUnitToKey));tmuConvert();tmuRenderConvTable(tmUnitConvGroup);}
+function tmuToggleDrop(){const drop=document.getElementById('tmu-to-drop'),chev=document.getElementById('tmu-to-chev');
+  const isOpen=drop.classList.contains('open');if(!isOpen){drop.classList.add('open');chev.classList.add('rotate-180');tmuBuildList();setTimeout(()=>document.getElementById('tmu-to-search').focus(),50);}
+  else{drop.classList.remove('open');chev.classList.remove('rotate-180');}}
+function tmuBuildList(){const q=(document.getElementById('tmu-to-search').value||'').toLowerCase();
+  const con=document.getElementById('tmu-to-list');con.innerHTML='';
+  const groups=['common','extended','scientific','astronomical'];const grouped={};groups.forEach(g=>grouped[g]=[]);
+  TIME_UNITS.filter(u=>!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)).forEach(u=>{if(grouped[u.group])grouped[u.group].push(u);});
+  let any=false;
+  groups.forEach(g=>{if(!grouped[g].length)return;any=true;
+    const meta=TIME_GROUP_META[g];const hd=document.createElement('div');hd.className='px-3 pt-2 pb-1';
+    hd.innerHTML=`<span class="text-xs font-semibold uppercase tracking-widest ${meta.color.split(' ')[1]} opacity-70">${meta.label}</span>`;con.appendChild(hd);
+    grouped[g].forEach(u=>{const cur=tmUnitToKey===u.key;
+      const btn=document.createElement('button');btn.className=`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-violet-500/10 ${cur?'text-violet-400 bg-violet-500/8 font-medium':'text-gray-300'}`;
+      btn.textContent=tmUnitLabel(u);btn.onclick=()=>{tmUnitToKey=u.key;document.getElementById('tmu-to-label').textContent=tmUnitLabel(u);document.getElementById('tmu-to-drop').classList.remove('open');document.getElementById('tmu-to-chev').classList.remove('rotate-180');tmuConvert();};con.appendChild(btn);});});
+  if(!any)con.innerHTML='<div class="px-3 py-4 text-sm text-gray-600 text-center">No units found</div>';}
+function tmuFilterGroup(g){tmUnitConvGroup=g;
+  document.querySelectorAll('.tmutab').forEach(b=>{const a=b.dataset.group===g;
+    b.className=a?'tmutab text-xs font-medium px-3 py-1.5 rounded-lg bg-violet-600/20 text-violet-400 border border-violet-500/30 transition-all':'tmutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all';});
+  tmuRenderConvTable(g);}
+function tmuRenderConvTable(group){const tbody=document.getElementById('tmu-conv-table');if(!tbody)return;
+  const units=TIME_UNITS.filter(u=>u.key!==tmUnitFromKey&&(group==='all'||u.group===group));
+  tbody.innerHTML=units.map(u=>{const meta=TIME_GROUP_META[u.group];const result=convertTime(1,tmUnitFromKey,u.key);
+    return `<tr class="result-row border-b border-white/3 cursor-pointer" onclick="navigate('/time/${slug(u.key)}')">
+      <td class="px-4 sm:px-5 py-2.5"><span class="text-sm text-gray-200">${u.label}</span></td>
+      <td class="px-3 py-2.5 hidden sm:table-cell"><span class="font-mono text-xs text-gray-500">${u.symbol||'—'}</span></td>
+      <td class="px-4 sm:px-5 py-2.5 text-right"><span class="font-mono text-sm text-gray-300">${fmtNum(result)}</span></td>
+      <td class="px-3 py-2.5"><span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-xs ${meta.color}">${meta.label.slice(0,3)}</span></td>
+    </tr>`;}).join('');}
+function tmuInitOutsideClick(){document.addEventListener('click',function handler(e){
+  const w=document.getElementById('tmu-to-wrap'),d=document.getElementById('tmu-to-drop');
+  if(!w){document.removeEventListener('click',handler);return;}
+  if(!w.contains(e.target)){d.classList.remove('open');const c=document.getElementById('tmu-to-chev');if(c)c.classList.remove('rotate-180');}});}
+
+// ================================================================
+//  TIME CONVERSION PAIR PAGE  e.g. /time/hour-to-minute
+// ================================================================
+function renderTimeConversionPage(fromKey,toKey){
+  updateNavActive('time');
+  const fromUnit=getTimeUnit(fromKey),toUnit=getTimeUnit(toKey);
+  if(!fromUnit||!toUnit){navigate('/time');return;}
+  const fromDesc=TIME_UNIT_DESC[fromKey]||{short:`Unit of time: ${fromUnit.label}`,long:`The ${fromUnit.label} is a unit of time.`};
+  const toDesc=TIME_UNIT_DESC[toKey]||{short:`Unit of time: ${toUnit.label}`,long:`The ${toUnit.label} is a unit of time.`};
+  const fromMeta=TIME_GROUP_META[fromUnit.group],toMeta=TIME_GROUP_META[toUnit.group];
+  const factor=convertTime(1,fromKey,toKey);
+  updateSEO({title:`Convert ${fromUnit.label} to ${toUnit.label} | Omni Converter`,
+    description:`Instantly convert ${fromUnit.label} to ${toUnit.label}. 1 ${fromUnit.label} = ${fmtNum(factor)} ${toUnit.label}. Free online time converter.`,
+    url:`https://www.omniconverter.cyou/time/${slug(fromKey)}-to-${slug(toKey)}`});
+  const commonVals=[0.01,0.1,0.5,1,2,5,10,20,50,100,200,500,1000,10000];
+  const root=document.getElementById('app-root');
+  root.innerHTML=`<div class="page-fade">
+    <nav class="flex items-center gap-2 text-xs text-gray-600 mb-5 flex-wrap">
+      <button onclick="navigate('/')" class="hover:text-violet-400 transition-colors">Omni Converter</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/time')" class="hover:text-violet-400 transition-colors">Time</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/time/${slug(fromKey)}')" class="hover:text-violet-400 transition-colors">${fromUnit.label}</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <span class="text-gray-400">${fromUnit.label} to ${toUnit.label}</span>
+    </nav>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/50 backdrop-blur-sm p-5 sm:p-7 mb-6">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${fromMeta.color} border border-current/20"><i class="fa-solid ${fromMeta.icon} mr-1.5 text-xs"></i>${fromMeta.label}</span>
+        <i class="fa-solid fa-arrow-right text-gray-600 text-xs"></i>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toMeta.color} border border-current/20"><i class="fa-solid ${toMeta.icon} mr-1.5 text-xs"></i>${toMeta.label}</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-2">Convert ${fromUnit.label} to ${toUnit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed max-w-2xl mb-5">Instantly convert ${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''} to ${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}. Enter any value for real-time results.</p>
+      <div class="inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-violet-500/10 border border-violet-500/25">
+        <div class="text-center"><p class="text-2xl font-bold font-mono text-white">1</p><p class="text-xs text-gray-500 mt-0.5">${fromUnit.label}</p>${fromUnit.symbol?`<p class="font-mono text-xs text-violet-400">${fromUnit.symbol}</p>`:''}</div>
+        <i class="fa-solid fa-equals text-violet-400 text-xl"></i>
+        <div class="text-center"><p class="text-2xl font-bold font-mono text-violet-300">${fmtNum(factor)}</p><p class="text-xs text-gray-500 mt-0.5">${toUnit.label}</p>${toUnit.symbol?`<p class="font-mono text-xs text-violet-400">${toUnit.symbol}</p>`:''}</div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-violet-400 mr-2"></i>${fromUnit.label} to ${toUnit.label} Converter</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</label>
+          <div class="relative"><input id="tcp-from" type="text" inputmode="decimal" value="1" step="any"
+            class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-2xl font-bold text-white font-mono transition-all hover:border-violet-500/30"
+            placeholder="Enter value" oninput="tcpConvert()" />
+            ${fromUnit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-violet-400 font-mono text-sm pointer-events-none">${fromUnit.symbol}</span>`:''}
+          </div>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}</label>
+          <div class="relative"><input id="tcp-to" type="text" step="any" readonly
+            class="converter-input w-full bg-dark-800/50 border border-violet-500/20 rounded-xl px-4 py-3 text-2xl font-bold text-violet-300 font-mono cursor-default" placeholder="Result" />
+            ${toUnit.symbol?`<span class="absolute right-10 top-1/2 -translate-y-1/2 text-violet-400/60 font-mono text-sm pointer-events-none">${toUnit.symbol}</span>`:''}
+            <button onclick="tcpCopy()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-violet-400 transition-colors"><i class="fa-regular fa-copy text-sm" id="tcp-copy-icon"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-xs text-gray-500 mb-4">
+        <i class="fa-solid fa-function text-violet-500/60 flex-shrink-0"></i>
+        <span class="font-mono truncate" id="tcp-formula">1 ${fromUnit.label} × ${fmtNum(factor)} = ${fmtNum(factor)} ${toUnit.label}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="tcpSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600/15 border border-violet-500/25 text-violet-400 text-sm font-medium hover:bg-violet-600/25 transition-all">
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap
+        </button>
+        <button onclick="navigate('/time/${slug(toKey)}-to-${slug(fromKey)}')" class="text-xs text-gray-600 hover:text-violet-400 transition-colors">
+          <i class="fa-solid fa-rotate text-xs mr-1"></i>Reverse: ${toUnit.label} → ${fromUnit.label}
+        </button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+      <div class="p-4 sm:p-5 border-b border-white/5"><h2 class="text-base font-semibold text-white">${fromUnit.label} to ${toUnit.label} Table</h2><p class="text-xs text-gray-600 mt-0.5">Common ${fromUnit.label} values and their ${toUnit.label} equivalents</p></div>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-white/5">
+        <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</th>
+        <th class="text-center px-3 py-3 text-gray-700"><i class="fa-solid fa-arrow-right"></i></th>
+        <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}</th>
+      </tr></thead><tbody>
+        ${commonVals.map((v,i)=>`<tr class="${i%2===0?'bg-dark-800/20':''} border-b border-white/3 hover:bg-violet-500/5 transition-colors">
+          <td class="px-4 sm:px-5 py-2.5 font-mono text-sm text-gray-300">${v} ${fromUnit.symbol||fromUnit.label}</td>
+          <td class="px-3 py-2.5 text-center text-gray-700"><i class="fa-solid fa-arrow-right text-xs"></i></td>
+          <td class="px-4 sm:px-5 py-2.5 font-mono text-sm text-violet-300 text-right">${fmtNum(convertTime(v,fromKey,toKey))} ${toUnit.symbol||toUnit.label}</td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-function text-violet-400 mr-2"></i>How to Convert ${fromUnit.label} to ${toUnit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed mb-4">Multiply the value in <strong class="text-white">${fromUnit.label}</strong> by <strong class="font-mono text-violet-300">${fmtNum(factor)}</strong>.</p>
+      <div class="bg-dark-800/70 border border-white/8 rounded-xl p-4 font-mono text-sm mb-4">
+        <span class="text-violet-300">${toUnit.symbol||toUnit.label}</span><span class="text-gray-500"> = </span><span class="text-white">${fromUnit.symbol||fromUnit.label}</span><span class="text-gray-500"> × </span><span class="text-emerald-400">${fmtNum(factor)}</span>
+      </div>
+      <p class="text-gray-400 text-sm"><strong class="text-white">Example:</strong> 100 ${fromUnit.label} = <span class="font-mono text-violet-300">${fmtNum(convertTime(100,fromKey,toKey))} ${toUnit.symbol||toUnit.label}</span></p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5">
+        <div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${fromMeta.color} border border-current/20">${fromUnit.label}</span></div>
+        <h2 class="text-sm font-semibold text-white mb-2">About ${fromUnit.label}</h2>
+        <p class="text-gray-500 text-xs leading-relaxed">${fromDesc.long}</p>
+        <button onclick="navigate('/time/${slug(fromKey)}')" class="mt-3 text-xs text-violet-400 hover:text-violet-300 transition-colors">Full ${fromUnit.label} converter <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></button>
+      </div>
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5">
+        <div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toMeta.color} border border-current/20">${toUnit.label}</span></div>
+        <h2 class="text-sm font-semibold text-white mb-2">About ${toUnit.label}</h2>
+        <p class="text-gray-500 text-xs leading-relaxed">${toDesc.long}</p>
+        <button onclick="navigate('/time/${slug(toKey)}')" class="mt-3 text-xs text-violet-400 hover:text-violet-300 transition-colors">Full ${toUnit.label} converter <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/30 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-1">Convert ${fromUnit.label} to Other Time Units</h2>
+      <p class="text-xs text-gray-600 mb-4">Direct conversion pages from ${fromUnit.label}</p>
+      <div class="flex flex-wrap gap-2">
+        ${TIME_UNITS.filter(u=>u.key!==fromKey&&u.key!==toKey).sort((a,b)=>a.label.localeCompare(b.label)).map(u=>`<a href="/time/${slug(fromKey)}-to-${slug(u.key)}" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-dark-800/60 border border-white/5 text-xs text-gray-400 hover:text-violet-400 hover:border-violet-500/30 transition-all">${fromUnit.label} to ${u.label}</a>`).join('')}
+      </div>
+    </div>
+    ${buildConvFaqHtml(fromUnit, toUnit, factor, convertTime(1,toKey,fromKey), 'time')}
+  </div>`;
+  window._tcpFrom=fromKey;window._tcpTo=toKey;tcpConvert();
+}
+
+function tcpConvert(){
+  const raw=parseFloat(document.getElementById('tcp-from')?.value);const val=isNaN(raw)?0:raw;
+  const from=window._tcpFrom,to=window._tcpTo;if(!from||!to)return;
+  const result=convertTime(val,from,to);const toUnit=getTimeUnit(to);const frUnit=getTimeUnit(from);if(!toUnit||!frUnit)return;
+  document.getElementById('tcp-to').value=fmtNum(result);
+  const f1=convertTime(1,from,to);document.getElementById('tcp-formula').textContent=`1 ${frUnit.label} × ${fmtNum(f1)} = ${fmtNum(val*f1)} ${toUnit.label}`;
+}
+function tcpCopy(){const val=document.getElementById('tcp-to').value;if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});const icon=document.getElementById('tcp-copy-icon');
+  icon.className='fa-solid fa-circle-check text-emerald-400 text-sm';showToast('Copied to clipboard');setTimeout(()=>{icon.className='fa-regular fa-copy text-sm';},2000);}
+function tcpSwap(){navigate('/time/'+slug(window._tcpTo)+'-to-'+slug(window._tcpFrom));}
+
+// ================================================================
 //  AREA CONVERTER PAGE
 // ================================================================
 function renderAreaPage() {
@@ -5631,7 +6480,7 @@ function buildConvFaqHtml(fromUnit, toUnit, fwdFactor, revFactor, category) {
   const F = n => fmtNum(n);
   const fromSym = fromUnit.symbol ? ` (${fromUnit.symbol})` : '';
   const toSym   = toUnit.symbol   ? ` (${toUnit.symbol})`   : '';
-  const catLabel = category === 'area' ? 'area' : category === 'volume' ? 'volume' : category === 'weight' ? 'weight/mass' : category === 'temperature' ? 'temperature' : category === 'speed' ? 'speed' : 'length';
+  const catLabel = category === 'area' ? 'area' : category === 'volume' ? 'volume' : category === 'weight' ? 'weight/mass' : category === 'temperature' ? 'temperature' : category === 'speed' ? 'speed' : category === 'time' ? 'time' : 'length';
   const items = [
     faqItem(
       `How many ${toUnit.label} are in 1 ${fromUnit.label}?`,
@@ -5668,14 +6517,15 @@ function buildConvFaqHtml(fromUnit, toUnit, fwdFactor, revFactor, category) {
 function buildUnitFaqHtml(unit, desc, category) {
   const F = n => fmtNum(n);
   const sym = unit.symbol ? ` (${unit.symbol})` : '';
-  const catLabel = category === 'area' ? 'area' : category === 'volume' ? 'volume' : category === 'weight' ? 'weight/mass' : category === 'temperature' ? 'temperature' : category === 'speed' ? 'speed' : 'length';
-  const baseUnit = category === 'area' ? 'square meters' : category === 'volume' ? 'liters' : category === 'weight' ? 'kilograms' : category === 'temperature' ? 'kelvin' : category === 'speed' ? 'meters/second' : 'meters';
+  const catLabel = category === 'area' ? 'area' : category === 'volume' ? 'volume' : category === 'weight' ? 'weight/mass' : category === 'temperature' ? 'temperature' : category === 'speed' ? 'speed' : category === 'time' ? 'time' : 'length';
+  const baseUnit = category === 'area' ? 'square meters' : category === 'volume' ? 'liters' : category === 'weight' ? 'kilograms' : category === 'temperature' ? 'kelvin' : category === 'speed' ? 'meters/second' : category === 'time' ? 'seconds' : 'meters';
   const baseConv = category === 'area'
     ? convertArea(1, unit.key, 'square_meter')
     : category === 'volume' ? convertVolume(1, unit.key, 'liter')
     : category === 'weight' ? convertWeight(1, unit.key, 'kilogram')
     : category === 'temperature' ? convertTemp(1, unit.key, 'kelvin')
     : category === 'speed' ? convertSpeed(1, unit.key, 'meter_per_second')
+    : category === 'time' ? convertTime(1, unit.key, 'second')
     : convert(1, unit.key, 'meter');
   const items = [
     faqItem(

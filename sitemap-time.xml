@@ -1,9 +1,156 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Time category index -->
   <url>
     <loc>https://www.omniconverter.cyou/time</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
+
+  <!-- Unit detail pages -->
+  <url><loc>https://www.omniconverter.cyou/time/second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/microsecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/nanosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/week</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/decade</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/century</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millennium</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/fortnight</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/septennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/octennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/novennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/quinquennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/quindecennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/picosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/femtosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/attosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/shake</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/planck-time</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-julian</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-leap</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-tropical</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month-synodic</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- High-traffic conversion pair pages -->
+  <url><loc>https://www.omniconverter.cyou/time/second-to-millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millisecond-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-minute</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-hour</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-week</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/week-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-month</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-decade</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/decade-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-century</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/century-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-millennium</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millennium-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-microsecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/microsecond-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-nanosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/nanosecond-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-picosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/picosecond-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-femtosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/femtosecond-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-attosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/attosecond-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-fortnight</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/fortnight-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-planck-time</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/planck-time-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-month-synodic</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month-synodic-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-year-julian</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-julian-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-year-leap</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-leap-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-year-tropical</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-tropical-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-year-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-sidereal-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-day-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-sidereal-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-hour-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-sidereal-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-minute-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute-sidereal-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-second-sidereal</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-sidereal-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-shake</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/shake-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-septennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/septennial-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-octennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/octennial-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-novennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/novennial-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-quinquennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/quinquennial-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-quindecennial</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/quindecennial-to-second</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Popular cross-unit conversions -->
+  <url><loc>https://www.omniconverter.cyou/time/minute-to-hour</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-to-minute</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-hour</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-week</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/week-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-month</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-month</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute-to-millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millisecond-to-minute</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-to-millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millisecond-to-hour</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/week-to-month</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/month-to-week</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/week-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-week</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-decade</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/decade-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-century</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/century-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/nanosecond-to-millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millisecond-to-nanosecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/microsecond-to-millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millisecond-to-microsecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-minute</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/fortnight-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-fortnight</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/fortnight-to-week</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/week-to-fortnight</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-millennium</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/millennium-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/day-to-century</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/century-to-day</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/hour-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-hour</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/minute-to-year</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/year-to-minute</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.omniconverter.cyou/time/second-to-millisecond</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
 </urlset>
