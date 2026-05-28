@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>(function(s){s.dataset.zone='11062161',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <script>(function(s){s.dataset.zone='11062122',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-adsense-account" content="ca-pub-1470482870672850" />
@@ -314,13 +316,8 @@
             <span class="text-xs font-semibold text-gray-500 tracking-[0.18em] uppercase leading-none">converter</span>
           </div>
         </a>
-        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 ml-1">v1.0</span>
       </div>
       <div class="flex items-center gap-3">
-        <span class="hidden sm:flex items-center gap-1.5 text-xs" style="color: var(--text-tertiary);">
-          <i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>90+ length units
-        </span>
-        <span class="hidden md:flex items-center gap-1.5 text-xs font-medium" style="color: var(--text-tertiary);">Free &amp; Instant</span>
         <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
           <i class="fa-solid fa-sun text-sm" id="theme-icon"></i>
           <span class="hidden sm:inline">Light</span>
@@ -436,13 +433,11 @@
         <nav class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
           <a href="/about" class="text-gray-400 hover:text-indigo-400 transition-colors">About</a>
           <span class="text-gray-700">•</span>
-          <button onclick="openLegalModal('terms')" class="text-gray-400 hover:text-indigo-400 transition-colors">Terms</button>
+          <a href="/terms" class="text-gray-400 hover:text-indigo-400 transition-colors">Terms</a>
           <span class="text-gray-700">•</span>
           <button onclick="openLegalModal('privacy')" class="text-gray-400 hover:text-indigo-400 transition-colors">Privacy</button>
           <span class="text-gray-700">•</span>
           <button onclick="openLegalModal('disclaimer')" class="text-gray-400 hover:text-indigo-400 transition-colors">Disclaimer</button>
-          <span class="text-gray-700">•</span>
-          <a href="/site-owners" class="text-gray-400 hover:text-indigo-400 transition-colors">For Site Owners</a>
         </nav>
       </div>
       <div class="mt-5 pt-4 border-t text-xs text-gray-600 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2" style="border-color: var(--border-secondary);">
@@ -1492,6 +1487,7 @@ function getRoute() {
   if (parts[0] === 'speed') return { view: 'speed' };
   if (parts[0] === 'about') return { view: 'about' };
   if (parts[0] === 'site-owners') return { view: 'site_owners' };
+  if (parts[0] === 'terms') return { view: 'terms' };
   return { view: 'landing' };
 }
 
@@ -1530,6 +1526,7 @@ function router() {
   if (route.view === 'speed') { renderSpeedPage(); return; }
   if (route.view === 'about') { renderAboutPage(); return; }
   if (route.view === 'site_owners') { renderSiteOwnersPage(); return; }
+  if (route.view === 'terms') { renderTermsPage(); return; }
   renderLandingPage();
 }
 
@@ -1599,6 +1596,105 @@ function renderSiteOwnersPage() {
   `;
 }
 
+function renderTermsPage() {
+  updateNavActive('');
+  updateSEO({
+    title: 'Terms of Use | Omni Converter',
+    description: 'Read the Terms of Use for Omni Converter. Understand the conditions for using our free online unit conversion tools.',
+    url: 'https://www.omniconverter.cyou/terms'
+  });
+  const root = document.getElementById('app-root');
+  root.innerHTML = `
+    <div class="page-fade max-w-3xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-gray-600 mb-6">
+        <button onclick="navigate('/')" class="hover:text-indigo-400 transition-colors">Omni Converter</button>
+        <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+        <span class="text-gray-400">Terms of Use</span>
+      </nav>
+
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-xs font-medium text-indigo-400 mb-4">
+          <i class="fa-solid fa-file-contract text-xs"></i> Legal
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Terms of Use</h1>
+        <p class="text-gray-500 text-sm">Last updated: May 2025</p>
+      </div>
+
+      <div class="space-y-6 text-sm text-gray-400 leading-relaxed">
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">1. Acceptance of Terms</h2>
+          <p>By accessing or using Omni Converter at <span class="text-indigo-400">omniconverter.cyou</span> (the "Site"), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the Site.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">2. Description of Service</h2>
+          <p>Omni Converter is a free, browser-based unit conversion tool. It provides conversion results across categories including length, area, volume, weight, temperature, speed, and more. The service is provided free of charge for personal and informational use.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">3. Accuracy and Reliability</h2>
+          <p class="mb-3">We strive to provide accurate conversion results based on internationally recognised standards and definitions. However, Omni Converter is provided <strong class="text-white">as-is</strong> without warranty of any kind, express or implied.</p>
+          <p>You should independently verify any conversion result before using it in legal, medical, safety-critical, contractual, financial, or engineering contexts. We are not liable for errors, omissions, or outcomes arising from reliance on conversion output.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">4. Permitted Use</h2>
+          <p class="mb-3">You may use Omni Converter for personal, educational, and informational purposes. You may link to specific converter pages from your website or content.</p>
+          <p>You may <strong class="text-white">not</strong>:</p>
+          <ul class="mt-2 space-y-1.5 list-none">
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Scrape, copy, or systematically extract content from the Site for redistribution</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Attempt to disrupt, overload, or interfere with the normal operation of the Site</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Use the Site in any way that violates applicable laws or regulations</li>
+            <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-red-500/70 text-xs mt-0.5 flex-shrink-0"></i>Frame or embed the Site without prior permission</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">5. Intellectual Property</h2>
+          <p>All content, design, code, and text on this Site is the property of Omni Converter unless otherwise stated. Unit conversion factors and scientific constants are based on public standards (NIST, BIPM, ISO) and are not proprietary.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">6. Third-Party Links and Advertising</h2>
+          <p>The Site may display third-party advertisements or contain links to external websites. We do not endorse or control the content of third-party sites and are not responsible for their practices. Advertisements are served by third-party ad networks and are subject to their own terms and privacy policies.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">7. Disclaimer of Warranties</h2>
+          <p>The Site and its content are provided <strong class="text-white">"as is"</strong> and <strong class="text-white">"as available"</strong> without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not warrant that the Site will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">8. Limitation of Liability</h2>
+          <p>To the fullest extent permitted by law, Omni Converter and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the Site, even if advised of the possibility of such damages.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">9. Changes to These Terms</h2>
+          <p>We reserve the right to update these Terms of Use at any time. Changes will be reflected by an updated date at the top of this page. Continued use of the Site after changes are posted constitutes your acceptance of the revised terms.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/8 bg-dark-800/50 p-6">
+          <h2 class="text-base font-semibold text-white mb-3">10. Governing Law</h2>
+          <p>These terms are governed by and construed in accordance with applicable law. Any disputes shall be resolved in the appropriate courts of the applicable jurisdiction.</p>
+        </div>
+
+        <div class="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-white font-medium mb-1">Questions about these terms?</p>
+            <p class="text-gray-500 text-xs">Review our Privacy Policy and Disclaimer for related information.</p>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="openLegalModal('privacy')" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Privacy Policy</button>
+            <button onclick="openLegalModal('disclaimer')" class="px-4 py-2 rounded-xl bg-dark-800/80 border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors text-xs">Disclaimer</button>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+}
+
 function renderAboutPage() {
   updateNavActive('');
   updateSEO({
@@ -1624,7 +1720,6 @@ function renderAboutPage() {
           <p class="hero-body-copy text-gray-400 text-base sm:text-lg leading-relaxed max-w-3xl mb-8">Omni Converter is a free, browser-based conversion website designed for speed, clarity, and dependable results. We built it so people can solve measurement problems quickly without clutter, signups, or distractions.</p>
           <div class="flex flex-wrap gap-3">
             <a href="/length" class="px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-600/30 transition-colors">Start Converting</a>
-            <a href="/site-owners" class="px-5 py-2.5 rounded-xl border border-white/10 text-gray-300 hover:text-indigo-300 hover:border-indigo-500/30 transition-colors">For Site Owners</a>
           </div>
         </div>
       </section>
