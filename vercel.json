@@ -40,8 +40,12 @@
       "destination": "/robots.txt"
     },
     {
-      "source": "/(.*)",
+      "source": "/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/:path+",
+      "destination": "/:path+/index.html"
     }
   ]
 }

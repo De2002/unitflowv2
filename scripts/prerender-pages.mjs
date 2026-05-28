@@ -94,6 +94,59 @@ function getSEO(routePath) {
     };
   }
 
+  if (parts[0] === 'terms') {
+    return {
+      title: 'Terms of Use | Omni Converter',
+      description: 'Read the Terms of Use for Omni Converter. Understand the conditions for using our free online unit conversion tools.',
+      url: abs
+    };
+  }
+
+  if (parts[0] === 'privacy') {
+    return {
+      title: 'Privacy Policy | Omni Converter',
+      description: 'Read the Privacy Policy for Omni Converter. Learn how we handle data, analytics, and advertising on our free online unit conversion tool.',
+      url: abs
+    };
+  }
+
+  if (parts[0] === 'disclaimer') {
+    return {
+      title: 'Disclaimer | Omni Converter',
+      description: 'Read the Disclaimer for Omni Converter. Important information about the accuracy of conversion results and the appropriate use of this free tool.',
+      url: abs
+    };
+  }
+
+  // /time
+  if (parts[0] === 'time' && parts.length === 1) {
+    return {
+      title: 'Time Converter — 35+ Units | Omni Converter',
+      description: 'Free online time converter. Convert between 35+ units including seconds, minutes, hours, days, weeks, months, years, and scientific time units. Instant results.',
+      url: abs
+    };
+  }
+
+  if (parts[0] === 'time' && parts[1] && parts[1].includes('-to-')) {
+    const idx      = parts[1].indexOf('-to-');
+    const fromSlug = parts[1].slice(0, idx);
+    const toSlug   = parts[1].slice(idx + 4);
+    return {
+      title: `Convert ${fromSlug.replace(/-/g, ' ')} to ${toSlug.replace(/-/g, ' ')} | Omni Converter`,
+      description: `Instantly convert ${fromSlug.replace(/-/g, ' ')} to ${toSlug.replace(/-/g, ' ')}. Free online time converter with formula and conversion table.`,
+      url: abs
+    };
+  }
+
+  if (parts[0] === 'time' && parts[1]) {
+    const label = parts[1].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    return {
+      title: `${label} Converter | Omni Converter`,
+      description: `Convert ${label} to other time units. Free online time converter with instant results.`,
+      url: abs
+    };
+  }
+
   // /length
   if (parts[0] === 'length' && parts.length === 1) {
     return {
