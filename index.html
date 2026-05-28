@@ -382,16 +382,18 @@
             <div class="flex-1 min-w-0"><p class="nav-label text-sm font-medium text-gray-300">Weight / Mass</p><p class="text-xs text-gray-600">80+ units</p></div>
             <i class="fa-solid fa-chevron-right text-xs text-indigo-400/70"></i>
           </a>
-          <button onclick="showComingSoon('Temperature')"
-            class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all group hover:bg-white/3">
-            <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-600"><i class="fa-solid fa-temperature-half text-xs"></i></span>
-            <div class="flex-1"><p class="text-sm font-medium text-gray-500">Temperature</p><p class="soon-badge text-xs text-indigo-500/70">Coming soon</p></div>
-          </button>
-          <button onclick="showComingSoon('Speed')"
-            class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all group hover:bg-white/3">
-            <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-600"><i class="fa-solid fa-gauge-high text-xs"></i></span>
-            <div class="flex-1"><p class="text-sm font-medium text-gray-500">Speed</p><p class="soon-badge text-xs text-indigo-500/70">Coming soon</p></div>
-          </button>
+          <a href="/temperature" data-cat="temperature"
+            class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all duration-200 group">
+            <span class="nav-icon w-8 h-8 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-400"><i class="fa-solid fa-temperature-half text-xs"></i></span>
+            <div class="flex-1 min-w-0"><p class="nav-label text-sm font-medium text-gray-300">Temperature</p><p class="text-xs text-gray-600">6 units</p></div>
+            <i class="fa-solid fa-chevron-right text-xs text-rose-400/70"></i>
+          </a>
+          <a href="/speed" data-cat="speed"
+            class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all duration-200 group">
+            <span class="nav-icon w-8 h-8 rounded-lg bg-cyan-500/15 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-gauge-high text-xs"></i></span>
+            <div class="flex-1 min-w-0"><p class="nav-label text-sm font-medium text-gray-300">Speed</p><p class="text-xs text-gray-600">30+ units</p></div>
+            <i class="fa-solid fa-chevron-right text-xs text-cyan-400/70"></i>
+          </a>
           <button onclick="showComingSoon('Time')"
             class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-left transition-all group hover:bg-white/3">
             <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-600"><i class="fa-solid fa-clock text-xs"></i></span>
@@ -1178,6 +1180,140 @@ function convertWeight(value, fromKey, toKey) {
   return (value * from.factor) / to.factor;
 }
 
+// ================================================================
+//  SPEED DATA  (base unit: meter/second)
+// ================================================================
+const SPEED_UNITS = [
+  // METRIC
+  { key:'meter_per_second',      label:'Meter/Second',                          symbol:'m/s',    factor:1,                   group:'metric' },
+  { key:'kilometer_per_hour',    label:'Kilometer/Hour',                        symbol:'km/h',   factor:0.2777777778,        group:'metric' },
+  { key:'kilometer_per_minute',  label:'Kilometer/Minute',                      symbol:'km/min', factor:16.6666666667,       group:'metric' },
+  { key:'kilometer_per_second',  label:'Kilometer/Second',                      symbol:'km/s',   factor:1000,                group:'metric' },
+  { key:'centimeter_per_hour',   label:'Centimeter/Hour',                       symbol:'cm/h',   factor:2.7777777777778e-6,  group:'metric' },
+  { key:'centimeter_per_minute', label:'Centimeter/Minute',                     symbol:'cm/min', factor:0.0001666667,        group:'metric' },
+  { key:'centimeter_per_second', label:'Centimeter/Second',                     symbol:'cm/s',   factor:0.01,                group:'metric' },
+  { key:'millimeter_per_hour',   label:'Millimeter/Hour',                       symbol:'mm/h',   factor:2.7777777777778e-7,  group:'metric' },
+  { key:'millimeter_per_minute', label:'Millimeter/Minute',                     symbol:'mm/min', factor:1.66667e-5,          group:'metric' },
+  { key:'millimeter_per_second', label:'Millimeter/Second',                     symbol:'mm/s',   factor:0.001,               group:'metric' },
+  { key:'meter_per_hour',        label:'Meter/Hour',                            symbol:'m/h',    factor:0.0002777778,        group:'metric' },
+  { key:'meter_per_minute',      label:'Meter/Minute',                          symbol:'m/min',  factor:0.0166666667,        group:'metric' },
+  // IMPERIAL / US
+  { key:'mile_per_hour',         label:'Mile/Hour',                             symbol:'mi/h',   factor:0.44704,             group:'imperial' },
+  { key:'mile_per_minute',       label:'Mile/Minute',                           symbol:'mi/min', factor:26.8224,             group:'imperial' },
+  { key:'mile_per_second',       label:'Mile/Second',                           symbol:'mi/s',   factor:1609.344,            group:'imperial' },
+  { key:'foot_per_hour',         label:'Foot/Hour',                             symbol:'ft/h',   factor:8.46667e-5,          group:'imperial' },
+  { key:'foot_per_minute',       label:'Foot/Minute',                           symbol:'ft/min', factor:0.00508,             group:'imperial' },
+  { key:'foot_per_second',       label:'Foot/Second',                           symbol:'ft/s',   factor:0.3048,              group:'imperial' },
+  { key:'yard_per_hour',         label:'Yard/Hour',                             symbol:'yd/h',   factor:0.000254,            group:'imperial' },
+  { key:'yard_per_minute',       label:'Yard/Minute',                           symbol:'yd/min', factor:0.01524,             group:'imperial' },
+  { key:'yard_per_second',       label:'Yard/Second',                           symbol:'yd/s',   factor:0.9144,              group:'imperial' },
+  { key:'knot',                  label:'Knot',                                  symbol:'kt',     factor:0.5144444444,        group:'nautical' },
+  { key:'knot_uk',               label:'Knot (UK)',                             symbol:'kt (UK)',factor:0.5147733333,        group:'nautical' },
+  // SCIENTIFIC / PHYSICAL
+  { key:'speed_of_light',        label:'Velocity of Light in Vacuum',           symbol:'c',      factor:299792458,           group:'scientific' },
+  { key:'mach_20c',              label:'Mach (20°C, 1 atm)',                    symbol:'Ma',     factor:343.6,               group:'scientific' },
+  { key:'mach_si',               label:'Mach (SI standard)',                    symbol:'Ma',     factor:295.0464000003,      group:'scientific' },
+  { key:'sound_pure_water',      label:'Velocity of Sound in Pure Water',       symbol:'',       factor:1482.6999999998,     group:'scientific' },
+  { key:'sound_sea_water',       label:'Velocity of Sound in Sea Water',        symbol:'',       factor:1521.6,              group:'scientific' },
+  { key:'cosmic_first',          label:'Cosmic Velocity — First',               symbol:'',       factor:7899.9999999999,     group:'scientific' },
+  { key:'cosmic_second',         label:'Cosmic Velocity — Second',              symbol:'',       factor:11200,               group:'scientific' },
+  { key:'cosmic_third',          label:'Cosmic Velocity — Third',               symbol:'',       factor:16670,               group:'scientific' },
+  { key:'earths_velocity',       label:"Earth's Orbital Velocity",              symbol:'',       factor:29765,               group:'scientific' },
+];
+
+const SPEED_UNIT_DESC = {
+  meter_per_second:      { short:'The SI base unit of speed; 1 m/s = 3.6 km/h.', long:'The meter per second (symbol: m/s) is the SI derived unit of speed and velocity. It is defined as the distance in meters traveled in one second. 1 m/s equals 3.6 km/h or approximately 2.237 mph. It is the standard unit for scientific and engineering calculations involving speed.' },
+  kilometer_per_hour:    { short:'The most common speed unit globally for road and transport.', long:'The kilometer per hour (symbol: km/h) is the speed unit used for road transport in most countries worldwide. 1 km/h = 1/3.6 m/s ≈ 0.2778 m/s. Highway speed limits, vehicle speedometers, and weather wind speeds are typically expressed in km/h outside the United States.' },
+  kilometer_per_minute:  { short:'16.67 m/s; used occasionally in high-speed transport contexts.', long:'The kilometer per minute (symbol: km/min) equals 1,000 meters per minute or approximately 16.667 m/s (60 km/h). It is rarely used in everyday contexts but appears in some engineering and rail transport specifications.' },
+  kilometer_per_second:  { short:'1,000 m/s; used for spacecraft and planetary science speeds.', long:'The kilometer per second (symbol: km/s) equals 1,000 meters per second. It is used in astronomy and space science — for example, the orbital speed of Earth around the Sun is about 29.8 km/s. Planetary entry velocities and comet speeds are commonly expressed in km/s.' },
+  centimeter_per_hour:   { short:'≈ 2.78 × 10⁻⁶ m/s; used for very slow processes like glacier movement.', long:'The centimeter per hour (symbol: cm/h) is an extremely slow speed unit equal to about 2.778 × 10⁻⁶ m/s. It is used to describe very slow motion such as glacier flow rates, soil creep, or biological growth processes.' },
+  centimeter_per_minute: { short:'0.000167 m/s; a slow-movement measurement unit.', long:'The centimeter per minute (symbol: cm/min) equals approximately 1.667 × 10⁻⁴ m/s. It is used in laboratory settings, medical infusion pumps, and slow industrial processes where precise low-speed measurement is required.' },
+  centimeter_per_second: { short:'0.01 m/s; used in microfluidics and slow-flow measurements.', long:'The centimeter per second (symbol: cm/s) equals exactly 0.01 m/s. It is commonly used in fluid dynamics, microfluidics, and biological sciences. Ocean current speeds and slow sediment transport rates are often measured in cm/s.' },
+  millimeter_per_hour:   { short:'≈ 2.78 × 10⁻⁷ m/s; describes ultra-slow processes.', long:'The millimeter per hour (symbol: mm/h) equals about 2.778 × 10⁻⁷ m/s. It is most commonly used in meteorology to express rainfall intensity (precipitation rate). A "heavy rain" is typically defined as more than 7.6 mm/h.' },
+  millimeter_per_minute: { short:'1.67 × 10⁻⁵ m/s; rarely used outside specialised contexts.', long:'The millimeter per minute (symbol: mm/min) equals approximately 1.667 × 10⁻⁵ m/s. It appears in CNC machining (feed rate), 3D printing (movement speed), and precision coating processes.' },
+  millimeter_per_second: { short:'0.001 m/s; used in precision engineering and seismic monitoring.', long:'The millimeter per second (symbol: mm/s) equals exactly 0.001 m/s. It is used in vibration measurement, seismology (ground velocity), and precision manufacturing processes such as slow-speed conveyors and robotic actuators.' },
+  meter_per_hour:        { short:'0.000278 m/s; used for very slow-moving objects and processes.', long:'The meter per hour (symbol: m/h) equals approximately 2.778 × 10⁻⁴ m/s. It is used for describing very slow motion — for example, average walking speed is about 5,000 m/h (5 km/h). It also appears in geotechnical engineering for groundwater flow rates.' },
+  meter_per_minute:      { short:'0.01667 m/s; used in conveyor systems and industrial processes.', long:'The meter per minute (symbol: m/min) equals approximately 0.01667 m/s or 0.06 km/h. It is commonly used in industrial settings for conveyor belt speeds, paper and fabric manufacturing line speeds, and some elevator specifications.' },
+  mile_per_hour:         { short:'The primary speed unit in the US and UK; 1 mph ≈ 1.609 km/h.', long:'The mile per hour (symbol: mph or mi/h) is the standard unit of speed used on roads in the United States, United Kingdom, and a few other countries. 1 mph = 0.44704 m/s ≈ 1.60934 km/h. A typical highway speed limit of 70 mph equals about 112.7 km/h. The unit dates from early use of miles and hours in English-speaking nations.' },
+  mile_per_minute:       { short:'26.82 m/s; about 60 mph — useful for quick mental calculations.', long:'The mile per minute (symbol: mi/min) equals exactly 26.8224 m/s or 96.5606 km/h. Interestingly, 1 mile per minute equals exactly 60 miles per hour. It is used occasionally in aeronautics and as a convenient conversion reference between mile-based and metric speeds.' },
+  mile_per_second:       { short:'1,609.34 m/s; an extremely high speed unit.', long:'The mile per second (symbol: mi/s) equals exactly 1,609.344 m/s ≈ 5,792 km/h. This is faster than most aircraft and rockets and is rarely encountered in everyday contexts. It is used as a reference unit in extreme-speed comparisons.' },
+  foot_per_hour:         { short:'8.47 × 10⁻⁵ m/s; used in some US engineering references.', long:'The foot per hour (symbol: ft/h) equals approximately 8.467 × 10⁻⁵ m/s. Like meter per hour, it describes very slow processes. It appears in some US geological and civil engineering data sets for slow groundwater and soil-creep rates.' },
+  foot_per_minute:       { short:'0.00508 m/s; used in HVAC, ventilation, and some US industries.', long:'The foot per minute (symbol: ft/min or fpm) equals exactly 0.00508 m/s. It is widely used in US HVAC (heating, ventilation, and air conditioning) engineering for air flow velocities, in elevator speed specifications, and in some US manufacturing standards.' },
+  foot_per_second:       { short:'0.3048 m/s; common in US physics and engineering.', long:'The foot per second (symbol: ft/s or fps) equals exactly 0.3048 m/s. It is used in US customary physics, ballistics, and engineering. The muzzle velocity of firearms and the speed of sound (approximately 1,125 ft/s at sea level) are often expressed in ft/s in US contexts.' },
+  yard_per_hour:         { short:'0.000254 m/s; a rarely used US customary speed unit.', long:'The yard per hour (symbol: yd/h) equals exactly 0.000254 m/s. It is rarely encountered in modern usage but appears in some historical US and British industrial contexts for describing very slow motion.' },
+  yard_per_minute:       { short:'0.01524 m/s; a US/UK customary speed unit.', long:'The yard per minute (symbol: yd/min) equals exactly 0.01524 m/s. It is used occasionally in US and UK textile and manufacturing industries, where fabric and material feed rates are expressed in yards per minute.' },
+  yard_per_second:       { short:'0.9144 m/s; roughly walking pace; used in some sports contexts.', long:'The yard per second (symbol: yd/s) equals exactly 0.9144 m/s. A brisk walking pace is roughly 1.5–2 yd/s. The unit appears in US and UK sports timing (e.g., American football field measurements) and some traditional engineering applications.' },
+  knot:                  { short:'1 nautical mile/hour (0.5144 m/s); the standard for maritime and aviation.', long:'The knot (symbol: kt or kn) equals one nautical mile per hour or exactly 0.51444 m/s (1.852 km/h). It is the standard unit for maritime navigation, aviation airspeed, and meteorological wind speed worldwide. The term comes from the historical method of measuring ship speed using a knotted rope and sandglass (the "chip log").' },
+  knot_uk:               { short:'The UK Admiralty knot; slightly faster than the international knot.', long:'The UK knot (symbol: kt UK) equals one UK nautical mile per hour, approximately 0.51477 m/s. The UK nautical mile was historically defined as 6,080 feet (vs. the international nautical mile of 1,852 m), making it very slightly larger than the international standard. The UK Admiralty knot is now largely obsolete following adoption of the international standard.' },
+  speed_of_light:        { short:'299,792,458 m/s; the cosmic speed limit; denoted c.', long:'The speed of light in vacuum (symbol: c) equals exactly 299,792,458 m/s — approximately 300,000 km/s or 186,282 miles per second. It is a fundamental physical constant and the universal speed limit according to Einstein\'s theory of special relativity. The metre itself is now defined in terms of c: 1 metre is the distance light travels in 1/299,792,458 of a second.' },
+  mach_20c:              { short:'343.6 m/s; the speed of sound at 20°C, standard atmosphere.', long:'Mach 1 at 20°C and 1 standard atmosphere equals approximately 343.6 m/s (1,235 km/h). The Mach number, named after Ernst Mach, expresses the ratio of an object\'s speed to the local speed of sound. Aircraft flying below Mach 1 are subsonic; above Mach 1 they are supersonic; above Mach 5 they are hypersonic. The exact speed of sound varies with temperature: roughly 0.6 m/s per °C.' },
+  mach_si:               { short:'295.05 m/s; Mach 1 at SI standard conditions (−15°C, 11 km altitude).', long:'The SI standard Mach unit (approximately 295.046 m/s) corresponds to the speed of sound at the International Standard Atmosphere conditions used in aviation: −15°C at 11 km altitude (tropopause). This is the reference used in aeronautical engineering calculations for high-altitude flight.' },
+  sound_pure_water:      { short:'1,482.7 m/s; the speed of sound in fresh water at ~20°C.', long:'The speed of sound in pure water at approximately 20°C is about 1,482.7 m/s — roughly 4.3 times faster than in air. Sound travels faster in liquids than in gases because of their greater bulk modulus. This value is used in sonar, underwater acoustics, medical ultrasound, and oceanographic research.' },
+  sound_sea_water:       { short:'1,521.6 m/s; speed of sound in sea water (20°C, 10 m depth).', long:'The speed of sound in sea water at 20°C and 10 metres depth is approximately 1,521.6 m/s. Sea water\'s higher salinity and pressure compared to fresh water increases the speed of sound further. Submarine sonar and oceanographic surveys rely on accurate models of underwater sound velocity, which varies with temperature, salinity, and depth.' },
+  cosmic_first:          { short:'≈ 7,900 m/s; Earth\'s first cosmic velocity — minimum orbital speed.', long:'The first cosmic velocity (approximately 7,900 m/s or 7.9 km/s) is the minimum speed needed for an object to orbit Earth at its surface (ignoring atmosphere). At this speed, the centripetal acceleration exactly balances Earth\'s gravitational pull. Satellites in low Earth orbit travel at approximately this speed.' },
+  cosmic_second:         { short:'11,200 m/s; Earth\'s escape velocity — second cosmic velocity.', long:'The second cosmic velocity (11,200 m/s or 11.2 km/s) is Earth\'s escape velocity — the minimum speed needed to break free from Earth\'s gravitational field without further propulsion. This is the speed required for spacecraft to leave Earth\'s sphere of influence and travel to other planets. Named the "second cosmic velocity" in Soviet-era aerospace literature.' },
+  cosmic_third:          { short:'16,670 m/s; the speed needed to escape the Solar System from Earth.', long:'The third cosmic velocity (approximately 16,670 m/s or 16.67 km/s) is the minimum speed needed for an object launched from Earth to escape the gravitational pull of the entire Solar System. This accounts for both Earth\'s escape velocity and the Sun\'s gravitational field. Voyager 1 and 2 achieved speeds exceeding this.' },
+  earths_velocity:       { short:'~29,765 m/s; Earth\'s mean orbital speed around the Sun.', long:"Earth's mean orbital velocity around the Sun is approximately 29,765 m/s (about 107,000 km/h or 29.8 km/s). This speed varies slightly between perihelion (closest approach, ~30.3 km/s in January) and aphelion (farthest point, ~29.3 km/s in July). Earth covers its 940-million-kilometre orbital path in approximately 365.25 days." },
+};
+
+const SPEED_GROUP_META = {
+  metric:     { label:'Metric',     color:'bg-blue-500/15 text-blue-400',    icon:'fa-ruler' },
+  imperial:   { label:'Imperial',   color:'bg-amber-500/15 text-amber-400',  icon:'fa-flag' },
+  nautical:   { label:'Nautical',   color:'bg-cyan-500/15 text-cyan-400',    icon:'fa-anchor' },
+  scientific: { label:'Scientific', color:'bg-violet-500/15 text-violet-400',icon:'fa-atom' },
+};
+
+function getSpeedUnit(key) { return SPEED_UNITS.find(u => u.key === key); }
+
+function convertSpeed(value, fromKey, toKey) {
+  const from = getSpeedUnit(fromKey);
+  const to   = getSpeedUnit(toKey);
+  if (!from || !to || !isFinite(value)) return NaN;
+  return (value * from.factor) / to.factor;
+}
+
+// ================================================================
+//  TEMPERATURE DATA
+//  Conversion model: toKelvin(v) = v * scale + offset
+//                    fromKelvin(K) = (K - offset) / scale
+//  factor field = value that gives 1 unit in Kelvin (for sitemap only)
+// ================================================================
+const TEMP_UNITS = [
+  { key:'kelvin',              label:'Kelvin',              symbol:'K',   scale:1,          offset:0,         factor:1,             group:'si' },
+  { key:'celsius',             label:'Celsius',             symbol:'°C',  scale:1,          offset:273.15,    factor:274.15,        group:'si' },
+  { key:'fahrenheit',          label:'Fahrenheit',          symbol:'°F',  scale:5/9,        offset:255.3722222222, factor:255.9277777778, group:'imperial' },
+  { key:'rankine',             label:'Rankine',             symbol:'°R',  scale:5/9,        offset:0,         factor:0.5555555556,  group:'imperial' },
+  { key:'reaumur',             label:'Réaumur',             symbol:'°Ré', scale:5/4,        offset:273.15,    factor:274.4,         group:'historical' },
+  { key:'triple_point_water',  label:'Triple Point of Water', symbol:'',  scale:273.16,     offset:0,         factor:273.16,        group:'scientific' },
+];
+
+const TEMP_UNIT_DESC = {
+  kelvin:             { short:'The SI base unit of thermodynamic temperature; 0 K is absolute zero.', long:'The kelvin (symbol: K) is the SI base unit of thermodynamic temperature. It is defined by fixing the Boltzmann constant k to exactly 1.380649 × 10⁻²³ J/K. The kelvin scale starts at absolute zero (0 K = −273.15 °C), the coldest theoretically attainable temperature. Water freezes at 273.15 K and boils at 373.15 K at standard pressure. Named after Lord Kelvin (William Thomson, 1824–1907).' },
+  celsius:            { short:'The everyday metric temperature scale; 0 °C = water freezing point.', long:'The degree Celsius (symbol: °C) is the most widely used temperature scale for everyday purposes worldwide. 0 °C is defined as the freezing point of water and 100 °C as its boiling point at standard atmospheric pressure (101.325 kPa). The Celsius scale is identical in magnitude to the Kelvin scale: a difference of 1 °C equals a difference of 1 K. Named after Anders Celsius (1701–1744).' },
+  fahrenheit:         { short:'The imperial temperature scale; water freezes at 32 °F, boils at 212 °F.', long:'The degree Fahrenheit (symbol: °F) is the temperature scale used in the United States and a few other countries for everyday temperature measurement. Water freezes at 32 °F and boils at 212 °F at standard pressure. Normal human body temperature is approximately 98.6 °F (37 °C). The Fahrenheit scale was proposed by Daniel Gabriel Fahrenheit in 1724 using mercury thermometers.' },
+  rankine:            { short:'An absolute temperature scale using Fahrenheit-sized degrees; 0 °R = absolute zero.', long:'The Rankine scale (symbol: °R) is an absolute temperature scale that uses Fahrenheit-sized degrees. Like the Kelvin scale it starts at absolute zero (0 °R), but its degree intervals are 5/9 the size of a kelvin. Water freezes at 491.67 °R and boils at 671.67 °R. It is used in some engineering contexts in the United States, particularly in thermodynamic calculations within the imperial system. Proposed by William Rankine in 1859.' },
+  reaumur:            { short:'A historical scale where water freezes at 0 °Ré and boils at 80 °Ré.', long:'The Réaumur scale (symbol: °Ré or °r) is a historical temperature scale in which water freezes at 0 °Ré and boils at 80 °Ré at standard pressure. It was widely used in continental Europe — particularly in France, Germany, and Russia — from the 18th to the early 20th century. Named after René Antoine Ferchault de Réaumur (1683–1757). The scale has been almost entirely replaced by Celsius in modern usage.' },
+  triple_point_water: { short:'273.16 K — the temperature at which water coexists as solid, liquid, and gas.', long:'The triple point of water is the unique thermodynamic state (273.16 K / 0.01 °C at 611.657 Pa) at which water coexists simultaneously in solid, liquid, and gaseous phases in thermodynamic equilibrium. It was historically used to define the kelvin itself (prior to the 2019 SI redefinition). As a temperature reference unit, 1 "triple point of water" corresponds to 273.16 K. It is a fundamental constant in metrology and thermometry.' },
+};
+
+const TEMP_GROUP_META = {
+  si:         { label:'SI / Metric',  color:'bg-blue-500/15 text-blue-400',    icon:'fa-flask' },
+  imperial:   { label:'Imperial',     color:'bg-amber-500/15 text-amber-400',  icon:'fa-flag' },
+  historical: { label:'Historical',   color:'bg-emerald-500/15 text-emerald-400', icon:'fa-scroll' },
+  scientific: { label:'Scientific',   color:'bg-violet-500/15 text-violet-400', icon:'fa-atom' },
+};
+
+function getTempUnit(key) { return TEMP_UNITS.find(u => u.key === key); }
+
+// Temperature uses offset+scale: toKelvin = v*scale+offset, fromKelvin = (K-offset)/scale
+function convertTemp(value, fromKey, toKey) {
+  const from = getTempUnit(fromKey);
+  const to   = getTempUnit(toKey);
+  if (!from || !to || !isFinite(value)) return NaN;
+  const K = value * from.scale + from.offset;
+  return (K - to.offset) / to.scale;
+}
+
 function updateNavActive(cat) {
   document.querySelectorAll('.nav-item[data-cat]').forEach(btn => {
     if (btn.dataset.cat === cat) { btn.classList.add('active'); }
@@ -1338,6 +1474,22 @@ function getRoute() {
     return { view: 'wt_unit', key: keyFromSlug(parts[1]) };
   }
   if (parts[0] === 'weight') return { view: 'weight' };
+  // /temperature/celsius-to-fahrenheit
+  if (parts[0] === 'temperature' && parts[1]) {
+    const conv = splitConvSlug(parts[1]);
+    if (conv && conv.from && conv.to)
+      return { view: 'tmp_conv', fromKey: keyFromSlug(conv.from), toKey: keyFromSlug(conv.to) };
+    return { view: 'tmp_unit', key: keyFromSlug(parts[1]) };
+  }
+  if (parts[0] === 'temperature') return { view: 'temperature' };
+  // /speed/kilometer-per-hour-to-mile-per-hour
+  if (parts[0] === 'speed' && parts[1]) {
+    const conv = splitConvSlug(parts[1]);
+    if (conv && conv.from && conv.to)
+      return { view: 'spd_conv', fromKey: keyFromSlug(conv.from), toKey: keyFromSlug(conv.to) };
+    return { view: 'spd_unit', key: keyFromSlug(parts[1]) };
+  }
+  if (parts[0] === 'speed') return { view: 'speed' };
   if (parts[0] === 'about') return { view: 'about' };
   if (parts[0] === 'site-owners') return { view: 'site_owners' };
   return { view: 'landing' };
@@ -1368,6 +1520,14 @@ function router() {
   if (route.view === 'wt_conv') { const f=getWeightUnit(route.fromKey),t=getWeightUnit(route.toKey); if(f&&t){renderWeightConversionPage(route.fromKey,route.toKey);return;} }
   if (route.view === 'wt_unit') { if(getWeightUnit(route.key)){renderWeightUnitPage(route.key);return;} }
   if (route.view === 'weight') { renderWeightPage(); return; }
+  // Temperature routes
+  if (route.view === 'tmp_conv') { const f=getTempUnit(route.fromKey),t=getTempUnit(route.toKey); if(f&&t){renderTempConversionPage(route.fromKey,route.toKey);return;} }
+  if (route.view === 'tmp_unit') { if(getTempUnit(route.key)){renderTempUnitPage(route.key);return;} }
+  if (route.view === 'temperature') { renderTemperaturePage(); return; }
+  // Speed routes
+  if (route.view === 'spd_conv') { const f=getSpeedUnit(route.fromKey),t=getSpeedUnit(route.toKey); if(f&&t){renderSpeedConversionPage(route.fromKey,route.toKey);return;} }
+  if (route.view === 'spd_unit') { if(getSpeedUnit(route.key)){renderSpeedUnitPage(route.key);return;} }
+  if (route.view === 'speed') { renderSpeedPage(); return; }
   if (route.view === 'about') { renderAboutPage(); return; }
   if (route.view === 'site_owners') { renderSiteOwnersPage(); return; }
   renderLandingPage();
@@ -1640,8 +1800,8 @@ function renderLandingPage() {
           <a href="/area" class="group rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-600/10 to-violet-600/5 p-4 sm:p-5 text-left hover:border-indigo-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center mb-3 group-hover:bg-indigo-500/25 transition-colors"><i class="fa-solid fa-vector-square text-indigo-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Area</p><p class="text-xs text-indigo-400">40+ units active</p></a>
           <a href="/volume" class="group rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-600/10 to-violet-600/5 p-4 sm:p-5 text-left hover:border-indigo-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center mb-3 group-hover:bg-indigo-500/25 transition-colors"><i class="fa-solid fa-flask text-indigo-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Volume</p><p class="text-xs text-indigo-400">80+ units active</p></a>
           <a href="/weight" class="group rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-600/10 to-violet-600/5 p-4 sm:p-5 text-left hover:border-indigo-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center mb-3 group-hover:bg-indigo-500/25 transition-colors"><i class="fa-solid fa-weight-hanging text-indigo-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Weight / Mass</p><p class="text-xs text-indigo-400">80+ units active</p></a>
-          <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-temperature-half text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Temperature</p><p class="text-xs text-gray-700">Coming soon</p></div>
-          <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-gauge-high text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Speed</p><p class="text-xs text-gray-700">Coming soon</p></div>
+          <a href="/temperature" class="group rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-600/10 to-orange-600/5 p-4 sm:p-5 text-left hover:border-rose-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center mb-3 group-hover:bg-rose-500/25 transition-colors"><i class="fa-solid fa-temperature-half text-rose-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Temperature</p><p class="text-xs text-rose-400">6 units active</p></a>
+          <a href="/speed" class="group rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-600/10 to-blue-600/5 p-4 sm:p-5 text-left hover:border-cyan-500/50 hover:scale-[1.02] transition-all"><div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center mb-3 group-hover:bg-cyan-500/25 transition-colors"><i class="fa-solid fa-gauge-high text-cyan-400"></i></div><p class="text-sm font-semibold text-white mb-0.5">Speed</p><p class="text-xs text-cyan-400">30+ units active</p></a>
           <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-clock text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Time</p><p class="text-xs text-gray-700">Coming soon</p></div>
           <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-compress-arrows-alt text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Pressure</p><p class="text-xs text-gray-700">Coming soon</p></div>
           <div class="rounded-2xl border border-white/5 bg-dark-800/30 p-4 sm:p-5 opacity-50 cursor-not-allowed"><div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3"><i class="fa-solid fa-bolt text-gray-600"></i></div><p class="text-sm font-medium text-gray-500 mb-0.5">Energy</p><p class="text-xs text-gray-700">Coming soon</p></div>
@@ -3176,6 +3336,1051 @@ function wcpCopy(){const val=document.getElementById('wcp-to').value;if(!val||va
 function wcpSwap(){navigate('/weight/'+slug(window._wcpTo)+'-to-'+slug(window._wcpFrom));}
 
 // ================================================================
+//  TEMPERATURE CONVERTER PAGE
+// ================================================================
+let tmpFromKey = 'celsius';
+let tmpToKey   = 'fahrenheit';
+let tmpGroup   = 'all';
+
+function renderTemperaturePage() {
+  updateNavActive('temperature');
+  updateSEO({
+    title: 'Temperature Converter — Celsius, Fahrenheit, Kelvin & More | Omni Converter',
+    description: 'Free online temperature converter. Convert between Celsius, Fahrenheit, Kelvin, Rankine, Réaumur and more. Instant, accurate results.',
+    url: 'https://www.omniconverter.cyou/temperature'
+  });
+  const root = document.getElementById('app-root');
+  root.innerHTML = `
+    <div class="page-fade">
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-2 justify-between">
+          <span class="inline-flex items-center gap-1.5 text-xs font-medium text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-temperature-half text-xs"></i> Temperature
+          </span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Temperature Converter</h2>
+        <p class="text-gray-500 text-sm mt-1">Convert between Celsius, Fahrenheit, Kelvin, Rankine, Réaumur &amp; more.</p>
+      </div>
+
+      <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From</label>
+            <div class="relative">
+              <input id="tmp-from-value" type="text" inputmode="decimal" value="0" step="any"
+                class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-rose-500/30"
+                placeholder="Enter value" oninput="tmpConvert()" />
+              <button onclick="tmpClear()" id="tmp-clear-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 transition-colors hidden">
+                <i class="fa-solid fa-xmark text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From Unit</label>
+            <div id="tmp-from-wrap">
+              <button id="tmp-from-btn" onclick="tmpToggleDrop('from')"
+                class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-rose-500/30 transition-all">
+                <span id="tmp-from-label"></span>
+                <i class="fa-solid fa-chevron-down text-rose-400 text-xs transition-transform duration-200" id="tmp-from-chev"></i>
+              </button>
+              <div id="tmp-from-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+                <div class="p-2 border-b border-white/5"><input id="tmp-from-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-rose-500/40" oninput="tmpBuildList('from')" /></div>
+                <div id="tmp-from-list" class="search-dropdown py-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center my-4">
+          <button onclick="tmpSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-rose-600/15 border border-rose-500/25 text-rose-400 text-sm font-medium hover:bg-rose-600/25 hover:border-rose-500/50 transition-all">
+            <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap Units
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To</label>
+            <div class="relative">
+              <input id="tmp-to-value" type="text" readonly
+                class="converter-input w-full bg-dark-800/60 border border-white/8 rounded-xl px-4 py-3 text-xl font-semibold text-rose-300 font-mono cursor-default" placeholder="Result" />
+              <button onclick="tmpCopy()" title="Copy result" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-rose-400 transition-colors">
+                <i class="fa-regular fa-copy text-sm" id="tmp-copy-icon"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To Unit</label>
+            <div id="tmp-to-wrap">
+              <button id="tmp-to-btn" onclick="tmpToggleDrop('to')"
+                class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-rose-500/30 transition-all">
+                <span id="tmp-to-label"></span>
+                <i class="fa-solid fa-chevron-down text-rose-400 text-xs transition-transform duration-200" id="tmp-to-chev"></i>
+              </button>
+              <div id="tmp-to-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+                <div class="p-2 border-b border-white/5"><input id="tmp-to-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-rose-500/40" oninput="tmpBuildList('to')" /></div>
+                <div id="tmp-to-list" class="search-dropdown py-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-xs text-gray-500">
+          <i class="fa-solid fa-function text-rose-500/60 flex-shrink-0"></i>
+          <span id="tmp-formula-text" class="font-mono truncate"></span>
+        </div>
+      </div>
+
+      <!-- UNITS GRID -->
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+        <div class="p-4 sm:p-5 border-b border-white/5 flex flex-wrap items-center justify-between gap-3">
+          <div><h2 class="text-base font-semibold text-white">All Temperature Units</h2><p class="text-xs text-gray-600 mt-0.5">Click any unit to open its dedicated converter page</p></div>
+          <div class="flex flex-wrap gap-1.5" id="tmp-group-tabs">
+            <button onclick="tmpFilterGroup('all')" data-group="all" class="tmpgtab active text-xs font-medium px-3 py-1.5 rounded-lg bg-rose-600/20 text-rose-400 border border-rose-500/30 transition-all">All</button>
+            <button onclick="tmpFilterGroup('si')" data-group="si" class="tmpgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">SI / Metric</button>
+            <button onclick="tmpFilterGroup('imperial')" data-group="imperial" class="tmpgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Imperial</button>
+            <button onclick="tmpFilterGroup('historical')" data-group="historical" class="tmpgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Historical</button>
+            <button onclick="tmpFilterGroup('scientific')" data-group="scientific" class="tmpgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Scientific</button>
+          </div>
+        </div>
+        <div class="p-4 sm:p-5">
+          <div id="tmp-unit-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+          <p class="text-xs text-gray-600 mt-3" id="tmp-grid-count"></p>
+        </div>
+      </div>
+
+      <!-- QUICK REF TABLE -->
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+        <div class="p-4 sm:p-5 border-b border-white/5"><h2 class="text-base font-semibold text-white">Quick Reference Table</h2><p class="text-xs text-gray-600 mt-0.5">All conversions relative to your current input</p></div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="border-b border-white/5">
+              <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Unit</th>
+              <th class="text-left px-3 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Group</th>
+              <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Value</th>
+              <th class="px-3 py-3 w-10"></th>
+            </tr></thead>
+            <tbody id="tmp-ref-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('tmp-from-label').textContent = tmpUnitLabel(getTempUnit(tmpFromKey));
+  document.getElementById('tmp-to-label').textContent   = tmpUnitLabel(getTempUnit(tmpToKey));
+  tmpConvert(); tmpRenderGrid(); tmpRenderTable(); tmpInitOutsideClick();
+}
+
+function tmpUnitLabel(u) { return u.label + (u.symbol ? ' [' + u.symbol + ']' : ''); }
+
+function tmpConvert() {
+  const raw = parseFloat(document.getElementById('tmp-from-value').value);
+  const val = isNaN(raw) ? 0 : raw;
+  document.getElementById('tmp-to-value').value = fmtNum(convertTemp(val, tmpFromKey, tmpToKey));
+  const frU = getTempUnit(tmpFromKey), toU = getTempUnit(tmpToKey);
+  document.getElementById('tmp-formula-text').textContent = `1 ${frU.label} = ${fmtNum(convertTemp(1, tmpFromKey, tmpToKey))} ${toU.label}`;
+  const cb = document.getElementById('tmp-clear-btn');
+  if (cb) cb.classList.toggle('hidden', !document.getElementById('tmp-from-value').value);
+  tmpRenderTable();
+}
+function tmpClear() { document.getElementById('tmp-from-value').value=''; document.getElementById('tmp-from-value').focus(); tmpConvert(); }
+function tmpCopy() {
+  const val=document.getElementById('tmp-to-value').value; if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});
+  const icon=document.getElementById('tmp-copy-icon'); icon.className='fa-solid fa-circle-check text-emerald-400 text-sm';
+  showToast('Result copied to clipboard'); setTimeout(()=>{icon.className='fa-regular fa-copy text-sm';},2000);
+}
+function tmpSwap() {
+  const t=tmpFromKey; tmpFromKey=tmpToKey; tmpToKey=t;
+  document.getElementById('tmp-from-label').textContent=tmpUnitLabel(getTempUnit(tmpFromKey));
+  document.getElementById('tmp-to-label').textContent=tmpUnitLabel(getTempUnit(tmpToKey));
+  const tv=document.getElementById('tmp-to-value').value;
+  if(tv&&tv!=='—')document.getElementById('tmp-from-value').value=tv;
+  tmpConvert(); tmpRenderGrid();
+}
+function tmpToggleDrop(side) {
+  const drop=document.getElementById('tmp-'+side+'-drop'), chev=document.getElementById('tmp-'+side+'-chev');
+  const isOpen=drop.classList.contains('open');
+  ['from','to'].forEach(s=>{document.getElementById('tmp-'+s+'-drop').classList.remove('open');document.getElementById('tmp-'+s+'-chev').classList.remove('rotate-180');const si=document.getElementById('tmp-'+s+'-search');if(si)si.value='';});
+  if(!isOpen){drop.classList.add('open');chev.classList.add('rotate-180');tmpBuildList(side);setTimeout(()=>document.getElementById('tmp-'+side+'-search').focus(),50);}
+}
+function tmpBuildList(side) {
+  const q=(document.getElementById('tmp-'+side+'-search').value||'').toLowerCase();
+  const con=document.getElementById('tmp-'+side+'-list'); con.innerHTML='';
+  const groups=['si','imperial','historical','scientific']; const grouped={}; groups.forEach(g=>grouped[g]=[]);
+  TEMP_UNITS.filter(u=>!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)).forEach(u=>{if(grouped[u.group])grouped[u.group].push(u);});
+  let any=false;
+  groups.forEach(g=>{if(!grouped[g].length)return;any=true;
+    const meta=TEMP_GROUP_META[g];const hd=document.createElement('div');hd.className='px-3 pt-2 pb-1';
+    hd.innerHTML=`<span class="text-xs font-semibold uppercase tracking-widest ${meta.color.split(' ')[1]} opacity-70">${meta.label}</span>`;con.appendChild(hd);
+    grouped[g].forEach(u=>{const cur=(side==='from'?tmpFromKey:tmpToKey)===u.key;
+      const btn=document.createElement('button');btn.className=`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-rose-500/10 ${cur?'text-rose-400 bg-rose-500/8 font-medium':'text-gray-300'}`;
+      btn.textContent=tmpUnitLabel(u);btn.onclick=()=>tmpSelectUnit(side,u.key);con.appendChild(btn);});});
+  if(!any)con.innerHTML='<div class="px-3 py-4 text-sm text-gray-600 text-center">No units found</div>';
+}
+function tmpSelectUnit(side,key){
+  if(side==='from'){tmpFromKey=key;document.getElementById('tmp-from-label').textContent=tmpUnitLabel(getTempUnit(key));}
+  else{tmpToKey=key;document.getElementById('tmp-to-label').textContent=tmpUnitLabel(getTempUnit(key));}
+  document.getElementById('tmp-'+side+'-drop').classList.remove('open');document.getElementById('tmp-'+side+'-chev').classList.remove('rotate-180');
+  tmpConvert();tmpRenderGrid();
+}
+function tmpFilterGroup(g){
+  tmpGroup=g;
+  document.querySelectorAll('.tmpgtab').forEach(b=>{const a=b.dataset.group===g;
+    b.className=a?'tmpgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-rose-600/20 text-rose-400 border border-rose-500/30 transition-all'
+    :'tmpgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all';});
+  tmpRenderGrid();
+}
+function tmpRenderGrid(){
+  const units=TEMP_UNITS.filter(u=>tmpGroup==='all'||u.group===tmpGroup);
+  const grid=document.getElementById('tmp-unit-grid');
+  const val=parseFloat(document.getElementById('tmp-from-value')?.value);
+  const inputVal=isNaN(val)?0:val;
+  grid.innerHTML=units.map(u=>{const meta=TEMP_GROUP_META[u.group];const result=convertTemp(inputVal,tmpFromKey,u.key);const desc=TEMP_UNIT_DESC[u.key];
+    return `<a href="/temperature/${slug(u.key)}" class="unit-card text-left p-3 rounded-xl border border-white/6 bg-dark-800/40 transition-all duration-200 group">
+      <div class="flex items-start justify-between mb-1.5"><span class="text-sm font-medium text-gray-200 group-hover:text-white transition-colors leading-tight">${u.label}</span>
+      <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-xs ${meta.color} ml-2 flex-shrink-0">${u.symbol||meta.label.slice(0,3)}</span></div>
+      <p class="text-xs text-gray-600 leading-relaxed mb-2 line-clamp-1">${desc?desc.short:''}</p>
+      <div class="flex items-center justify-between"><span class="font-mono text-xs text-rose-300">${fmtNum(result)} ${u.symbol||''}</span>
+      <span class="text-xs text-rose-500/60 group-hover:text-rose-400 transition-colors">View page <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></span></div></a>`;}).join('');
+  const cnt=document.getElementById('tmp-grid-count');if(cnt)cnt.textContent=`Showing ${units.length} unit${units.length!==1?'s':''}`;
+}
+function tmpRenderTable(){
+  const val=parseFloat(document.getElementById('tmp-from-value')?.value);
+  const inputVal=isNaN(val)?0:val;
+  const tbody=document.getElementById('tmp-ref-table');if(!tbody)return;
+  tbody.innerHTML=TEMP_UNITS.map(u=>{const result=convertTemp(inputVal,tmpFromKey,u.key);const meta=TEMP_GROUP_META[u.group];const isFrom=u.key===tmpFromKey;
+    return `<tr class="result-row border-b border-white/3 transition-colors cursor-pointer" onclick="navigate('/temperature/${slug(u.key)}')">
+      <td class="px-4 sm:px-5 py-2.5"><div class="flex items-center gap-2">${isFrom?'<i class="fa-solid fa-arrow-right text-rose-400 text-xs"></i>':''}<span class="text-sm text-gray-200 ${isFrom?'font-semibold text-rose-300':''}">${u.label}${u.symbol?' ['+u.symbol+']':''}</span></div></td>
+      <td class="px-3 py-2.5 hidden sm:table-cell"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${meta.color}">${meta.label}</span></td>
+      <td class="px-4 sm:px-5 py-2.5 text-right"><span class="font-mono text-sm ${isFrom?'text-rose-300 font-semibold':'text-gray-300'}">${fmtNum(result)}</span></td>
+      <td class="px-3 py-2.5"><i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-700 hover:text-rose-400 transition-colors"></i></td>
+    </tr>`;}).join('');
+}
+function tmpInitOutsideClick(){
+  document.addEventListener('click',function handler(e){
+    if(!document.getElementById('tmp-from-wrap')&&!document.getElementById('tmp-to-wrap')){document.removeEventListener('click',handler);return;}
+    ['from','to'].forEach(s=>{const w=document.getElementById('tmp-'+s+'-wrap'),d=document.getElementById('tmp-'+s+'-drop');
+      if(w&&d&&!w.contains(e.target)){d.classList.remove('open');const c=document.getElementById('tmp-'+s+'-chev');if(c)c.classList.remove('rotate-180');}});});
+}
+
+// ================================================================
+//  TEMPERATURE UNIT DETAIL PAGE
+// ================================================================
+let tmpUnitFromKey='';
+let tmpUnitToKey='';
+let tmpUnitConvGroup='all';
+
+function renderTempUnitPage(key){
+  updateNavActive('temperature');
+  const unit=getTempUnit(key);if(!unit){navigate('/temperature');return;}
+  const desc=TEMP_UNIT_DESC[key]||{short:`Temperature unit: ${unit.label}`,long:`The ${unit.label} is a unit of temperature.`};
+  const meta=TEMP_GROUP_META[unit.group];
+  const related=TEMP_UNITS.filter(u=>u.group===unit.group&&u.key!==key).slice(0,6);
+  tmpUnitFromKey=key;
+  tmpUnitToKey=TEMP_UNITS.find(u=>u.key!==key)?.key||'celsius';
+  updateSEO({title:`${unit.label} Converter | Omni Converter`,description:`Convert ${unit.label}${unit.symbol?' ('+unit.symbol+')':''} to other temperature units. ${desc.short}`,url:`https://www.omniconverter.cyou/temperature/${slug(key)}`});
+  const inKelvin=convertTemp(1,key,'kelvin');
+  const root=document.getElementById('app-root');
+  root.innerHTML=`<div class="page-fade">
+    <nav class="flex items-center gap-2 text-xs text-gray-600 mb-5">
+      <button onclick="navigate('/')" class="hover:text-rose-400 transition-colors">Omni Converter</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/temperature')" class="hover:text-rose-400 transition-colors">Temperature</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <span class="text-gray-400">${unit.label}</span>
+    </nav>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/50 backdrop-blur-sm p-5 sm:p-7 mb-6">
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+        <div><div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${meta.color} border border-current/20"><i class="fa-solid ${meta.icon} mr-1.5 text-xs"></i>${meta.label}</span>
+          ${unit.symbol?`<span class="font-mono text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">${unit.symbol}</span>`:''}
+        </div><h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-1">${unit.label} Converter</h2><p class="text-gray-400 text-sm leading-relaxed max-w-xl">${desc.short}</p></div>
+        <div class="text-right"><p class="text-xs text-gray-600 mb-1">1 unit in Kelvin</p><p class="font-mono text-lg text-rose-300 font-semibold">${fmtNum(inKelvin)} K</p></div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/5">
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">In Kelvin</p><p class="font-mono text-xs text-white truncate">${fmtNum(inKelvin)}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">Category</p><p class="text-xs text-white">${meta.label}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">Symbol</p><p class="font-mono text-xs text-white">${unit.symbol||'—'}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">In Celsius</p><p class="font-mono text-xs text-white truncate">${fmtNum(convertTemp(1,key,'celsius'))} °C</p></div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-rose-400 mr-2"></i>Quick Converter</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From (${unit.label})</label>
+          <div class="relative"><input id="tmpu-from-val" type="text" inputmode="decimal" value="0" step="any"
+            class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-rose-500/30"
+            placeholder="Enter value" oninput="tmpuConvert()" />
+            ${unit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-rose-400 font-mono text-sm">${unit.symbol}</span>`:''}
+          </div>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To Unit</label>
+          <div id="tmpu-to-wrap"><button id="tmpu-to-btn" onclick="tmpuToggleDrop()"
+            class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-rose-500/30 transition-all">
+            <span id="tmpu-to-label"></span><i class="fa-solid fa-chevron-down text-rose-400 text-xs transition-transform duration-200" id="tmpu-to-chev"></i></button>
+            <div id="tmpu-to-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+              <div class="p-2 border-b border-white/5"><input id="tmpu-to-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-rose-500/40" oninput="tmpuBuildList()" /></div>
+              <div id="tmpu-to-list" class="search-dropdown py-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-dark-800/70 border border-white/8 rounded-xl p-4 mb-3">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-gray-600 uppercase tracking-wider">Result</span>
+          <button onclick="tmpuCopy()" class="text-xs text-gray-600 hover:text-rose-400 transition-colors flex items-center gap-1"><i class="fa-regular fa-copy text-xs" id="tmpu-copy-icon"></i> Copy</button>
+        </div>
+        <div class="flex items-baseline gap-2 flex-wrap"><span id="tmpu-result" class="font-mono text-3xl font-bold text-rose-300 num-shimmer"></span><span id="tmpu-result-sym" class="font-mono text-lg text-rose-400/60"></span></div>
+        <p id="tmpu-formula" class="text-xs text-gray-600 font-mono mt-2"></p>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="tmpuSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-rose-600/15 border border-rose-500/25 text-rose-400 text-sm font-medium hover:bg-rose-600/25 transition-all">
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap
+        </button>
+        <button onclick="navigate('/temperature')" class="flex items-center gap-1.5 text-xs text-gray-600 hover:text-rose-400 transition-colors"><i class="fa-solid fa-table text-xs"></i>All units</button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-3"><i class="fa-solid fa-circle-info text-rose-400 mr-2"></i>About the ${unit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">${desc.long}</p>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+      <div class="p-4 sm:p-5 border-b border-white/5">
+        <h2 class="text-base font-semibold text-white">1 ${unit.label} Equals…</h2><p class="text-xs text-gray-600 mt-0.5">Complete conversion table</p>
+      </div>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-white/5">
+        <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Unit</th>
+        <th class="text-left px-3 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Symbol</th>
+        <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">1 ${unit.symbol||unit.label} =</th>
+        <th class="px-3 py-3 w-10"></th>
+      </tr></thead><tbody id="tmpu-conv-table"></tbody></table></div>
+    </div>
+    ${related.length>0?`<div class="mb-6"><h2 class="text-base font-semibold text-white mb-3"><i class="fa-solid fa-link text-rose-400 mr-2"></i>Related ${meta.label} Units</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        ${related.map(u=>{const r=convertTemp(1,key,u.key);return `<a href="/temperature/${slug(u.key)}" class="unit-card text-left p-3 rounded-xl border border-white/6 bg-dark-800/40 transition-all duration-200 group">
+          <p class="text-xs font-medium text-gray-300 group-hover:text-white transition-colors mb-1 truncate">${u.label}</p>
+          ${u.symbol?`<p class="font-mono text-xs text-rose-400 mb-1">${u.symbol}</p>`:''}
+          <p class="font-mono text-xs text-gray-600">${fmtNum(r)}</p></a>`;}).join('')}
+      </div></div>`:''
+    }
+    <div class="rounded-2xl border border-white/8 bg-dark-700/30 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-1">Convert ${unit.label} to Other Temperature Units</h2>
+      <p class="text-xs text-gray-600 mb-4">Direct conversion pages</p>
+      <div class="flex flex-wrap gap-2">
+        ${TEMP_UNITS.filter(u=>u.key!==key).sort((a,b)=>a.label.localeCompare(b.label)).map(u=>`<a href="/temperature/${slug(key)}-to-${slug(u.key)}" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-dark-800/60 border border-white/5 text-xs text-gray-400 hover:text-rose-400 hover:border-rose-500/30 transition-all">${unit.label} → ${u.label}</a>`).join('')}
+      </div>
+    </div>
+    ${buildUnitFaqHtml(unit, desc, 'temperature')}
+  </div>`;
+  document.getElementById('tmpu-to-label').textContent=tmpUnitLabel(getTempUnit(tmpUnitToKey));
+  tmpuRenderConvTable(); tmpuConvert(); tmpuInitOutsideClick();
+}
+
+function tmpuConvert(){
+  const raw=parseFloat(document.getElementById('tmpu-from-val').value);const val=isNaN(raw)?0:raw;
+  const result=convertTemp(val,tmpUnitFromKey,tmpUnitToKey);const toUnit=getTempUnit(tmpUnitToKey);const frUnit=getTempUnit(tmpUnitFromKey);
+  document.getElementById('tmpu-result').textContent=fmtNum(result);document.getElementById('tmpu-result-sym').textContent=toUnit.symbol||toUnit.label;
+  document.getElementById('tmpu-formula').textContent=`0 ${frUnit.label} = ${fmtNum(convertTemp(0,tmpUnitFromKey,tmpUnitToKey))} ${toUnit.label}`;
+}
+function tmpuCopy(){const val=document.getElementById('tmpu-result').textContent;if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});const icon=document.getElementById('tmpu-copy-icon');
+  icon.className='fa-solid fa-circle-check text-emerald-400 text-xs';showToast('Copied!');setTimeout(()=>{icon.className='fa-regular fa-copy text-xs';},2000);}
+function tmpuSwap(){const tmp=tmpUnitFromKey;tmpUnitFromKey=tmpUnitToKey;tmpUnitToKey=tmp;
+  const rv=document.getElementById('tmpu-result').textContent;if(rv&&rv!=='—')document.getElementById('tmpu-from-val').value=rv;
+  document.getElementById('tmpu-to-label').textContent=tmpUnitLabel(getTempUnit(tmpUnitToKey));tmpuConvert();tmpuRenderConvTable();}
+function tmpuToggleDrop(){const drop=document.getElementById('tmpu-to-drop'),chev=document.getElementById('tmpu-to-chev');
+  const isOpen=drop.classList.contains('open');if(!isOpen){drop.classList.add('open');chev.classList.add('rotate-180');tmpuBuildList();setTimeout(()=>document.getElementById('tmpu-to-search').focus(),50);}
+  else{drop.classList.remove('open');chev.classList.remove('rotate-180');}}
+function tmpuBuildList(){const q=(document.getElementById('tmpu-to-search').value||'').toLowerCase();
+  const con=document.getElementById('tmpu-to-list');con.innerHTML='';
+  const groups=['si','imperial','historical','scientific'];const grouped={};groups.forEach(g=>grouped[g]=[]);
+  TEMP_UNITS.filter(u=>!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)).forEach(u=>{if(grouped[u.group])grouped[u.group].push(u);});
+  let any=false;
+  groups.forEach(g=>{if(!grouped[g].length)return;any=true;
+    const meta=TEMP_GROUP_META[g];const hd=document.createElement('div');hd.className='px-3 pt-2 pb-1';
+    hd.innerHTML=`<span class="text-xs font-semibold uppercase tracking-widest ${meta.color.split(' ')[1]} opacity-70">${meta.label}</span>`;con.appendChild(hd);
+    grouped[g].forEach(u=>{const cur=tmpUnitToKey===u.key;
+      const btn=document.createElement('button');btn.className=`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-rose-500/10 ${cur?'text-rose-400 bg-rose-500/8 font-medium':'text-gray-300'}`;
+      btn.textContent=tmpUnitLabel(u);btn.onclick=()=>{tmpUnitToKey=u.key;document.getElementById('tmpu-to-label').textContent=tmpUnitLabel(u);document.getElementById('tmpu-to-drop').classList.remove('open');document.getElementById('tmpu-to-chev').classList.remove('rotate-180');tmpuConvert();};con.appendChild(btn);});});
+  if(!any)con.innerHTML='<div class="px-3 py-4 text-sm text-gray-600 text-center">No units found</div>';}
+function tmpuRenderConvTable(){const tbody=document.getElementById('tmpu-conv-table');if(!tbody)return;
+  const units=TEMP_UNITS.filter(u=>u.key!==tmpUnitFromKey);
+  tbody.innerHTML=units.map(u=>{const meta=TEMP_GROUP_META[u.group];const result=convertTemp(1,tmpUnitFromKey,u.key);
+    return `<tr class="result-row border-b border-white/3 cursor-pointer" onclick="navigate('/temperature/${slug(u.key)}')">
+      <td class="px-4 sm:px-5 py-2.5"><span class="text-sm text-gray-200">${u.label}</span></td>
+      <td class="px-3 py-2.5 hidden sm:table-cell"><span class="font-mono text-xs text-gray-500">${u.symbol||'—'}</span></td>
+      <td class="px-4 sm:px-5 py-2.5 text-right"><span class="font-mono text-sm text-gray-300">${fmtNum(result)}</span></td>
+      <td class="px-3 py-2.5"><span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-xs ${meta.color}">${meta.label.slice(0,3)}</span></td>
+    </tr>`;}).join('');}
+function tmpuInitOutsideClick(){document.addEventListener('click',function handler(e){
+  const w=document.getElementById('tmpu-to-wrap'),d=document.getElementById('tmpu-to-drop');
+  if(!w){document.removeEventListener('click',handler);return;}
+  if(!w.contains(e.target)){d.classList.remove('open');const c=document.getElementById('tmpu-to-chev');if(c)c.classList.remove('rotate-180');}});}
+
+// ================================================================
+//  TEMPERATURE CONVERSION PAIR PAGE  e.g. /temperature/celsius-to-fahrenheit
+// ================================================================
+function renderTempConversionPage(fromKey,toKey){
+  updateNavActive('temperature');
+  const fromUnit=getTempUnit(fromKey),toUnit=getTempUnit(toKey);
+  if(!fromUnit||!toUnit){navigate('/temperature');return;}
+  const fromDesc=TEMP_UNIT_DESC[fromKey]||{short:`Temperature unit: ${fromUnit.label}`,long:`The ${fromUnit.label} is a unit of temperature.`};
+  const toDesc=TEMP_UNIT_DESC[toKey]||{short:`Temperature unit: ${toUnit.label}`,long:`The ${toUnit.label} is a unit of temperature.`};
+  const fromMeta=TEMP_GROUP_META[fromUnit.group],toMeta=TEMP_GROUP_META[toUnit.group];
+  // For the hero, show 0 and 100 as reference points
+  const zero_converted=convertTemp(0,fromKey,toKey);
+  const hundred_converted=convertTemp(100,fromKey,toKey);
+  updateSEO({title:`Convert ${fromUnit.label} to ${toUnit.label} | Omni Converter`,
+    description:`Instantly convert ${fromUnit.label} to ${toUnit.label}. 0 ${fromUnit.symbol||fromUnit.label} = ${fmtNum(zero_converted)} ${toUnit.symbol||toUnit.label}. Free online temperature converter.`,
+    url:`https://www.omniconverter.cyou/temperature/${slug(fromKey)}-to-${slug(toKey)}`});
+  const commonVals=[-273.15,-100,-40,-20,-10,0,10,20,37,50,100,200,500,1000];
+  const root=document.getElementById('app-root');
+  root.innerHTML=`<div class="page-fade">
+    <nav class="flex items-center gap-2 text-xs text-gray-600 mb-5 flex-wrap">
+      <button onclick="navigate('/')" class="hover:text-rose-400 transition-colors">Omni Converter</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/temperature')" class="hover:text-rose-400 transition-colors">Temperature</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/temperature/${slug(fromKey)}')" class="hover:text-rose-400 transition-colors">${fromUnit.label}</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <span class="text-gray-400">${fromUnit.label} to ${toUnit.label}</span>
+    </nav>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/50 backdrop-blur-sm p-5 sm:p-7 mb-6">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${fromMeta.color} border border-current/20"><i class="fa-solid ${fromMeta.icon} mr-1.5 text-xs"></i>${fromMeta.label}</span>
+        <i class="fa-solid fa-arrow-right text-gray-600 text-xs"></i>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toMeta.color} border border-current/20"><i class="fa-solid ${toMeta.icon} mr-1.5 text-xs"></i>${toMeta.label}</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-2">Convert ${fromUnit.label} to ${toUnit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed max-w-2xl mb-5">Instantly convert ${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''} to ${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}. Enter any value for real-time results.</p>
+      <div class="flex flex-wrap gap-4">
+        <div class="inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25">
+          <div class="text-center"><p class="text-2xl font-bold font-mono text-white">0</p><p class="text-xs text-gray-500 mt-0.5">${fromUnit.label}</p>${fromUnit.symbol?`<p class="font-mono text-xs text-rose-400">${fromUnit.symbol}</p>`:''}</div>
+          <i class="fa-solid fa-equals text-rose-400 text-xl"></i>
+          <div class="text-center"><p class="text-2xl font-bold font-mono text-rose-300">${fmtNum(zero_converted)}</p><p class="text-xs text-gray-500 mt-0.5">${toUnit.label}</p>${toUnit.symbol?`<p class="font-mono text-xs text-rose-400">${toUnit.symbol}</p>`:''}</div>
+        </div>
+        <div class="inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25">
+          <div class="text-center"><p class="text-2xl font-bold font-mono text-white">100</p><p class="text-xs text-gray-500 mt-0.5">${fromUnit.label}</p>${fromUnit.symbol?`<p class="font-mono text-xs text-rose-400">${fromUnit.symbol}</p>`:''}</div>
+          <i class="fa-solid fa-equals text-rose-400 text-xl"></i>
+          <div class="text-center"><p class="text-2xl font-bold font-mono text-rose-300">${fmtNum(hundred_converted)}</p><p class="text-xs text-gray-500 mt-0.5">${toUnit.label}</p>${toUnit.symbol?`<p class="font-mono text-xs text-rose-400">${toUnit.symbol}</p>`:''}</div>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-rose-400 mr-2"></i>${fromUnit.label} to ${toUnit.label} Converter</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</label>
+          <div class="relative"><input id="tcp-from" type="text" inputmode="decimal" value="0" step="any"
+            class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-2xl font-bold text-white font-mono transition-all hover:border-rose-500/30"
+            placeholder="Enter value" oninput="tcpConvert()" />
+            ${fromUnit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-rose-400 font-mono text-sm pointer-events-none">${fromUnit.symbol}</span>`:''}
+          </div>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}</label>
+          <div class="relative"><input id="tcp-to" type="text" step="any" readonly
+            class="converter-input w-full bg-dark-800/50 border border-rose-500/20 rounded-xl px-4 py-3 text-2xl font-bold text-rose-300 font-mono cursor-default" placeholder="Result" />
+            ${toUnit.symbol?`<span class="absolute right-10 top-1/2 -translate-y-1/2 text-rose-400/60 font-mono text-sm pointer-events-none">${toUnit.symbol}</span>`:''}
+            <button onclick="tcpCopy()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-rose-400 transition-colors"><i class="fa-regular fa-copy text-sm" id="tcp-copy-icon"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-xs text-gray-500 mb-4">
+        <i class="fa-solid fa-function text-rose-500/60 flex-shrink-0"></i>
+        <span class="font-mono truncate" id="tcp-formula"></span>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="tcpSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-rose-600/15 border border-rose-500/25 text-rose-400 text-sm font-medium hover:bg-rose-600/25 transition-all">
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap
+        </button>
+        <button onclick="navigate('/temperature/${slug(toKey)}-to-${slug(fromKey)}')" class="text-xs text-gray-600 hover:text-rose-400 transition-colors">
+          <i class="fa-solid fa-rotate text-xs mr-1"></i>Reverse: ${toUnit.label} → ${fromUnit.label}
+        </button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+      <div class="p-4 sm:p-5 border-b border-white/5"><h2 class="text-base font-semibold text-white">${fromUnit.label} to ${toUnit.label} Table</h2><p class="text-xs text-gray-600 mt-0.5">Common ${fromUnit.label} values and their ${toUnit.label} equivalents</p></div>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-white/5">
+        <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</th>
+        <th class="text-center px-3 py-3 text-gray-700"><i class="fa-solid fa-arrow-right"></i></th>
+        <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}</th>
+      </tr></thead><tbody>
+        ${commonVals.map((v,i)=>`<tr class="${i%2===0?'bg-dark-800/20':''} border-b border-white/3 hover:bg-rose-500/5 transition-colors">
+          <td class="px-4 sm:px-5 py-2.5 font-mono text-sm text-gray-300">${v} ${fromUnit.symbol||fromUnit.label}</td>
+          <td class="px-3 py-2.5 text-center text-gray-700"><i class="fa-solid fa-arrow-right text-xs"></i></td>
+          <td class="px-4 sm:px-5 py-2.5 font-mono text-sm text-rose-300 text-right">${fmtNum(convertTemp(v,fromKey,toKey))} ${toUnit.symbol||toUnit.label}</td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-function text-rose-400 mr-2"></i>How to Convert ${fromUnit.label} to ${toUnit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed mb-4">Temperature conversion uses an offset formula, not simple multiplication. To convert <strong class="text-white">${fromUnit.label}</strong> to <strong class="text-white">${toUnit.label}</strong>:</p>
+      <div class="bg-dark-800/70 border border-white/8 rounded-xl p-4 font-mono text-sm mb-4">
+        <span class="text-rose-300">${toUnit.symbol||toUnit.label}</span><span class="text-gray-500"> = (</span><span class="text-white">${fromUnit.symbol||fromUnit.label}</span><span class="text-gray-500"> × </span><span class="text-emerald-400">${fmtNum(fromUnit.scale/toUnit.scale)}</span><span class="text-gray-500"> + </span><span class="text-amber-400">${fmtNum((fromUnit.offset - toUnit.offset)/toUnit.scale)}</span><span class="text-gray-500">)</span>
+      </div>
+      <p class="text-gray-400 text-sm"><strong class="text-white">Example:</strong> 100 ${fromUnit.label} = <span class="font-mono text-rose-300">${fmtNum(convertTemp(100,fromKey,toKey))} ${toUnit.symbol||toUnit.label}</span></p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5">
+        <div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${fromMeta.color} border border-current/20">${fromUnit.label}</span></div>
+        <h2 class="text-sm font-semibold text-white mb-2">About the ${fromUnit.label}</h2>
+        <p class="text-gray-500 text-xs leading-relaxed">${fromDesc.long}</p>
+        <button onclick="navigate('/temperature/${slug(fromKey)}')" class="mt-3 text-xs text-rose-400 hover:text-rose-300 transition-colors">Full ${fromUnit.label} converter <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></button>
+      </div>
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5">
+        <div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toMeta.color} border border-current/20">${toUnit.label}</span></div>
+        <h2 class="text-sm font-semibold text-white mb-2">About the ${toUnit.label}</h2>
+        <p class="text-gray-500 text-xs leading-relaxed">${toDesc.long}</p>
+        <button onclick="navigate('/temperature/${slug(toKey)}')" class="mt-3 text-xs text-rose-400 hover:text-rose-300 transition-colors">Full ${toUnit.label} converter <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/30 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-1">Convert ${fromUnit.label} to Other Temperature Units</h2>
+      <p class="text-xs text-gray-600 mb-4">Direct conversion pages from ${fromUnit.label}</p>
+      <div class="flex flex-wrap gap-2">
+        ${TEMP_UNITS.filter(u=>u.key!==fromKey&&u.key!==toKey).sort((a,b)=>a.label.localeCompare(b.label)).map(u=>`<a href="/temperature/${slug(fromKey)}-to-${slug(u.key)}" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-dark-800/60 border border-white/5 text-xs text-gray-400 hover:text-rose-400 hover:border-rose-500/30 transition-all">${fromUnit.label} to ${u.label}</a>`).join('')}
+      </div>
+    </div>
+    ${buildConvFaqHtml(fromUnit, toUnit, convertTemp(1,fromKey,toKey), convertTemp(1,toKey,fromKey), 'temperature')}
+  </div>`;
+  window._tcpFrom=fromKey;window._tcpTo=toKey;tcpConvert();
+}
+
+function tcpConvert(){
+  const raw=parseFloat(document.getElementById('tcp-from')?.value);const val=isNaN(raw)?0:raw;
+  const from=window._tcpFrom,to=window._tcpTo;if(!from||!to)return;
+  const result=convertTemp(val,from,to);const toUnit=getTempUnit(to);const frUnit=getTempUnit(from);if(!toUnit||!frUnit)return;
+  document.getElementById('tcp-to').value=fmtNum(result);
+  document.getElementById('tcp-formula').textContent=`${val} ${frUnit.symbol||frUnit.label} = ${fmtNum(result)} ${toUnit.symbol||toUnit.label}`;
+}
+function tcpCopy(){const val=document.getElementById('tcp-to').value;if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});const icon=document.getElementById('tcp-copy-icon');
+  icon.className='fa-solid fa-circle-check text-emerald-400 text-sm';showToast('Copied to clipboard');setTimeout(()=>{icon.className='fa-regular fa-copy text-sm';},2000);}
+function tcpSwap(){navigate('/temperature/'+slug(window._tcpTo)+'-to-'+slug(window._tcpFrom));}
+
+// ================================================================
+//  SPEED CONVERTER PAGE
+// ================================================================
+let spdFromKey = 'kilometer_per_hour';
+let spdToKey   = 'mile_per_hour';
+let spdGroup   = 'all';
+
+function renderSpeedPage() {
+  updateNavActive('speed');
+  updateSEO({
+    title: 'Speed Converter — 30+ Units | Omni Converter',
+    description: 'Free online speed converter. Convert between 30+ units including metric, imperial, nautical and scientific speed units. Instant results.',
+    url: 'https://www.omniconverter.cyou/speed'
+  });
+  const root = document.getElementById('app-root');
+  root.innerHTML = `
+    <div class="page-fade">
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-2 justify-between">
+          <span class="inline-flex items-center gap-1.5 text-xs font-medium text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-gauge-high text-xs"></i> Speed
+          </span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Speed Converter</h2>
+        <p class="text-gray-500 text-sm mt-1">Convert between 30+ speed units — metric, imperial, nautical &amp; scientific.</p>
+      </div>
+
+      <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From</label>
+            <div class="relative">
+              <input id="spd-from-value" type="text" inputmode="decimal" value="1" step="any"
+                class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-cyan-500/30"
+                placeholder="Enter value" oninput="spdConvert()" />
+              <button onclick="spdClear()" id="spd-clear-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 transition-colors hidden">
+                <i class="fa-solid fa-xmark text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From Unit</label>
+            <div id="spd-from-wrap">
+              <button id="spd-from-btn" onclick="spdToggleDrop('from')"
+                class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-cyan-500/30 transition-all">
+                <span id="spd-from-label"></span>
+                <i class="fa-solid fa-chevron-down text-cyan-400 text-xs transition-transform duration-200" id="spd-from-chev"></i>
+              </button>
+              <div id="spd-from-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+                <div class="p-2 border-b border-white/5"><input id="spd-from-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-cyan-500/40" oninput="spdBuildList('from')" /></div>
+                <div id="spd-from-list" class="search-dropdown py-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center my-4">
+          <button onclick="spdSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 text-sm font-medium hover:bg-cyan-600/25 hover:border-cyan-500/50 transition-all">
+            <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap Units
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To</label>
+            <div class="relative">
+              <input id="spd-to-value" type="text" readonly
+                class="converter-input w-full bg-dark-800/60 border border-white/8 rounded-xl px-4 py-3 text-xl font-semibold text-cyan-300 font-mono cursor-default" placeholder="Result" />
+              <button onclick="spdCopy()" title="Copy result" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-cyan-400 transition-colors">
+                <i class="fa-regular fa-copy text-sm" id="spd-copy-icon"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To Unit</label>
+            <div id="spd-to-wrap">
+              <button id="spd-to-btn" onclick="spdToggleDrop('to')"
+                class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-cyan-500/30 transition-all">
+                <span id="spd-to-label"></span>
+                <i class="fa-solid fa-chevron-down text-cyan-400 text-xs transition-transform duration-200" id="spd-to-chev"></i>
+              </button>
+              <div id="spd-to-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+                <div class="p-2 border-b border-white/5"><input id="spd-to-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-cyan-500/40" oninput="spdBuildList('to')" /></div>
+                <div id="spd-to-list" class="search-dropdown py-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-xs text-gray-500">
+          <i class="fa-solid fa-function text-cyan-500/60 flex-shrink-0"></i>
+          <span id="spd-formula-text" class="font-mono truncate"></span>
+        </div>
+      </div>
+
+      <!-- UNITS GRID -->
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+        <div class="p-4 sm:p-5 border-b border-white/5 flex flex-wrap items-center justify-between gap-3">
+          <div><h2 class="text-base font-semibold text-white">All Speed Units</h2><p class="text-xs text-gray-600 mt-0.5">Click any unit to open its dedicated converter page</p></div>
+          <div class="flex flex-wrap gap-1.5" id="spd-group-tabs">
+            <button onclick="spdFilterGroup('all')" data-group="all" class="spdgtab active text-xs font-medium px-3 py-1.5 rounded-lg bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 transition-all">All</button>
+            <button onclick="spdFilterGroup('metric')" data-group="metric" class="spdgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Metric</button>
+            <button onclick="spdFilterGroup('imperial')" data-group="imperial" class="spdgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Imperial</button>
+            <button onclick="spdFilterGroup('nautical')" data-group="nautical" class="spdgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Nautical</button>
+            <button onclick="spdFilterGroup('scientific')" data-group="scientific" class="spdgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Scientific</button>
+          </div>
+        </div>
+        <div class="px-4 sm:px-5 py-3 border-b border-white/5">
+          <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-xs"></i>
+            <input id="spd-unit-grid-search" type="text" placeholder="Search units…"
+              class="w-full bg-dark-800/60 rounded-lg pl-8 pr-4 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-cyan-500/30 transition-colors"
+              oninput="spdRenderGrid()" />
+          </div>
+        </div>
+        <div class="p-4 sm:p-5">
+          <div id="spd-unit-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+          <p class="text-xs text-gray-600 mt-3" id="spd-grid-count"></p>
+        </div>
+      </div>
+
+      <!-- QUICK REF TABLE -->
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+        <div class="p-4 sm:p-5 border-b border-white/5"><h2 class="text-base font-semibold text-white">Quick Reference Table</h2><p class="text-xs text-gray-600 mt-0.5">All conversions relative to your current input</p></div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="border-b border-white/5">
+              <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Unit</th>
+              <th class="text-left px-3 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Group</th>
+              <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Value</th>
+              <th class="px-3 py-3 w-10"></th>
+            </tr></thead>
+            <tbody id="spd-ref-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('spd-from-label').textContent = spdUnitLabel(getSpeedUnit(spdFromKey));
+  document.getElementById('spd-to-label').textContent   = spdUnitLabel(getSpeedUnit(spdToKey));
+  spdConvert(); spdRenderGrid(); spdRenderTable(); spdInitOutsideClick();
+}
+
+function spdUnitLabel(u) { return u.label + (u.symbol ? ' [' + u.symbol + ']' : ''); }
+
+function spdConvert() {
+  const raw = parseFloat(document.getElementById('spd-from-value').value);
+  const val = isNaN(raw) ? 0 : raw;
+  document.getElementById('spd-to-value').value = fmtNum(convertSpeed(val, spdFromKey, spdToKey));
+  document.getElementById('spd-formula-text').textContent = `1 ${getSpeedUnit(spdFromKey).label} = ${fmtNum(convertSpeed(1, spdFromKey, spdToKey))} ${getSpeedUnit(spdToKey).label}`;
+  const cb = document.getElementById('spd-clear-btn');
+  if (cb) cb.classList.toggle('hidden', !document.getElementById('spd-from-value').value);
+  spdRenderTable();
+}
+function spdClear() { document.getElementById('spd-from-value').value=''; document.getElementById('spd-from-value').focus(); spdConvert(); }
+function spdCopy() {
+  const val=document.getElementById('spd-to-value').value; if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});
+  const icon=document.getElementById('spd-copy-icon'); icon.className='fa-solid fa-circle-check text-emerald-400 text-sm';
+  showToast('Result copied to clipboard'); setTimeout(()=>{icon.className='fa-regular fa-copy text-sm';},2000);
+}
+function spdSwap() {
+  const t=spdFromKey; spdFromKey=spdToKey; spdToKey=t;
+  document.getElementById('spd-from-label').textContent=spdUnitLabel(getSpeedUnit(spdFromKey));
+  document.getElementById('spd-to-label').textContent=spdUnitLabel(getSpeedUnit(spdToKey));
+  const tv=document.getElementById('spd-to-value').value;
+  if(tv&&tv!=='—')document.getElementById('spd-from-value').value=tv;
+  spdConvert(); spdRenderGrid();
+}
+function spdToggleDrop(side) {
+  const drop=document.getElementById('spd-'+side+'-drop'), chev=document.getElementById('spd-'+side+'-chev');
+  const isOpen=drop.classList.contains('open');
+  ['from','to'].forEach(s=>{document.getElementById('spd-'+s+'-drop').classList.remove('open');document.getElementById('spd-'+s+'-chev').classList.remove('rotate-180');const si=document.getElementById('spd-'+s+'-search');if(si)si.value='';});
+  if(!isOpen){drop.classList.add('open');chev.classList.add('rotate-180');spdBuildList(side);setTimeout(()=>document.getElementById('spd-'+side+'-search').focus(),50);}
+}
+function spdBuildList(side) {
+  const q=(document.getElementById('spd-'+side+'-search').value||'').toLowerCase();
+  const con=document.getElementById('spd-'+side+'-list'); con.innerHTML='';
+  const groups=['metric','imperial','nautical','scientific']; const grouped={}; groups.forEach(g=>grouped[g]=[]);
+  SPEED_UNITS.filter(u=>!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)).forEach(u=>{if(grouped[u.group])grouped[u.group].push(u);});
+  let any=false;
+  groups.forEach(g=>{if(!grouped[g].length)return;any=true;
+    const meta=SPEED_GROUP_META[g];const hd=document.createElement('div');hd.className='px-3 pt-2 pb-1';
+    hd.innerHTML=`<span class="text-xs font-semibold uppercase tracking-widest ${meta.color.split(' ')[1]} opacity-70">${meta.label}</span>`;con.appendChild(hd);
+    grouped[g].forEach(u=>{const cur=(side==='from'?spdFromKey:spdToKey)===u.key;
+      const btn=document.createElement('button');btn.className=`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-cyan-500/10 ${cur?'text-cyan-400 bg-cyan-500/8 font-medium':'text-gray-300'}`;
+      btn.textContent=spdUnitLabel(u);btn.onclick=()=>spdSelectUnit(side,u.key);con.appendChild(btn);});});
+  if(!any)con.innerHTML='<div class="px-3 py-4 text-sm text-gray-600 text-center">No units found</div>';
+}
+function spdSelectUnit(side,key){
+  if(side==='from'){spdFromKey=key;document.getElementById('spd-from-label').textContent=spdUnitLabel(getSpeedUnit(key));}
+  else{spdToKey=key;document.getElementById('spd-to-label').textContent=spdUnitLabel(getSpeedUnit(key));}
+  document.getElementById('spd-'+side+'-drop').classList.remove('open');document.getElementById('spd-'+side+'-chev').classList.remove('rotate-180');
+  spdConvert();spdRenderGrid();
+}
+function spdFilterGroup(g){
+  spdGroup=g;
+  document.querySelectorAll('.spdgtab').forEach(b=>{const a=b.dataset.group===g;
+    b.className=a?'spdgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 transition-all'
+    :'spdgtab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all';});
+  spdRenderGrid();
+}
+function spdRenderGrid(){
+  const q=(document.getElementById('spd-unit-grid-search')?.value||'').toLowerCase();
+  const units=SPEED_UNITS.filter(u=>(spdGroup==='all'||u.group===spdGroup)&&(!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)));
+  const grid=document.getElementById('spd-unit-grid');
+  const val=parseFloat(document.getElementById('spd-from-value')?.value)||1;
+  grid.innerHTML=units.map(u=>{const meta=SPEED_GROUP_META[u.group];const result=convertSpeed(val,spdFromKey,u.key);const desc=SPEED_UNIT_DESC[u.key];
+    return `<a href="/speed/${slug(u.key)}" class="unit-card text-left p-3 rounded-xl border border-white/6 bg-dark-800/40 transition-all duration-200 group">
+      <div class="flex items-start justify-between mb-1.5"><span class="text-sm font-medium text-gray-200 group-hover:text-white transition-colors leading-tight">${u.label}</span>
+      <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-xs ${meta.color} ml-2 flex-shrink-0">${u.symbol||meta.label.slice(0,3)}</span></div>
+      <p class="text-xs text-gray-600 leading-relaxed mb-2 line-clamp-1">${desc?desc.short:''}</p>
+      <div class="flex items-center justify-between"><span class="font-mono text-xs text-cyan-300">${fmtNum(result)} ${u.symbol||''}</span>
+      <span class="text-xs text-cyan-500/60 group-hover:text-cyan-400 transition-colors">View page <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></span></div></a>`;}).join('');
+  const cnt=document.getElementById('spd-grid-count');if(cnt)cnt.textContent=`Showing ${units.length} unit${units.length!==1?'s':''}`;
+}
+function spdRenderTable(){
+  const val=parseFloat(document.getElementById('spd-from-value')?.value)||0;
+  const tbody=document.getElementById('spd-ref-table');if(!tbody)return;
+  tbody.innerHTML=SPEED_UNITS.map(u=>{const result=convertSpeed(val,spdFromKey,u.key);const meta=SPEED_GROUP_META[u.group];const isFrom=u.key===spdFromKey;
+    return `<tr class="result-row border-b border-white/3 transition-colors cursor-pointer" onclick="navigate('/speed/${slug(u.key)}')">
+      <td class="px-4 sm:px-5 py-2.5"><div class="flex items-center gap-2">${isFrom?'<i class="fa-solid fa-arrow-right text-cyan-400 text-xs"></i>':''}<span class="text-sm text-gray-200 ${isFrom?'font-semibold text-cyan-300':''}">${u.label}${u.symbol?' ['+u.symbol+']':''}</span></div></td>
+      <td class="px-3 py-2.5 hidden sm:table-cell"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${meta.color}">${meta.label}</span></td>
+      <td class="px-4 sm:px-5 py-2.5 text-right"><span class="font-mono text-sm ${isFrom?'text-cyan-300 font-semibold':'text-gray-300'}">${fmtNum(result)}</span></td>
+      <td class="px-3 py-2.5"><i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-700 hover:text-cyan-400 transition-colors"></i></td>
+    </tr>`;}).join('');
+}
+function spdInitOutsideClick(){
+  document.addEventListener('click',function handler(e){
+    if(!document.getElementById('spd-from-wrap')&&!document.getElementById('spd-to-wrap')){document.removeEventListener('click',handler);return;}
+    ['from','to'].forEach(s=>{const w=document.getElementById('spd-'+s+'-wrap'),d=document.getElementById('spd-'+s+'-drop');
+      if(w&&d&&!w.contains(e.target)){d.classList.remove('open');const c=document.getElementById('spd-'+s+'-chev');if(c)c.classList.remove('rotate-180');}});});
+}
+
+// ================================================================
+//  SPEED UNIT DETAIL PAGE
+// ================================================================
+let spdUnitFromKey='';
+let spdUnitToKey='';
+let spdUnitConvGroup='all';
+
+function renderSpeedUnitPage(key){
+  updateNavActive('speed');
+  const unit=getSpeedUnit(key);if(!unit){navigate('/speed');return;}
+  const desc=SPEED_UNIT_DESC[key]||{short:`Unit of speed: ${unit.label}`,long:`The ${unit.label} is a unit of speed.`};
+  const meta=SPEED_GROUP_META[unit.group];
+  const related=SPEED_UNITS.filter(u=>u.group===unit.group&&u.key!==key).slice(0,6);
+  spdUnitFromKey=key;
+  spdUnitToKey=SPEED_UNITS.find(u=>u.key!==key)?.key||'kilometer_per_hour';
+  updateSEO({title:`${unit.label} Converter | Omni Converter`,description:`Convert ${unit.label}${unit.symbol?' ('+unit.symbol+')':''} to other speed units. ${desc.short}`,url:`https://www.omniconverter.cyou/speed/${slug(key)}`});
+  const root=document.getElementById('app-root');
+  root.innerHTML=`<div class="page-fade">
+    <nav class="flex items-center gap-2 text-xs text-gray-600 mb-5">
+      <button onclick="navigate('/')" class="hover:text-cyan-400 transition-colors">Omni Converter</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/speed')" class="hover:text-cyan-400 transition-colors">Speed</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <span class="text-gray-400">${unit.label}</span>
+    </nav>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/50 backdrop-blur-sm p-5 sm:p-7 mb-6">
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+        <div><div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${meta.color} border border-current/20"><i class="fa-solid ${meta.icon} mr-1.5 text-xs"></i>${meta.label}</span>
+          ${unit.symbol?`<span class="font-mono text-xs text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">${unit.symbol}</span>`:''}
+        </div><h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-1">${unit.label} Converter</h2><p class="text-gray-400 text-sm leading-relaxed max-w-xl">${desc.short}</p></div>
+        <div class="text-right"><p class="text-xs text-gray-600 mb-1">In m/s</p><p class="font-mono text-lg text-cyan-300 font-semibold">${unit.factor<1e-10||unit.factor>1e9?unit.factor.toExponential(6):fmtNum(unit.factor)} m/s</p></div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/5">
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">In m/s</p><p class="font-mono text-xs text-white truncate">${unit.factor<1e-10||unit.factor>1e9?unit.factor.toExponential(4):fmtNum(unit.factor)}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">Category</p><p class="text-xs text-white">${meta.label}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">Symbol</p><p class="font-mono text-xs text-white">${unit.symbol||'—'}</p></div>
+        <div class="bg-dark-800/60 rounded-xl p-3"><p class="text-xs text-gray-600 mb-1">In km/h</p><p class="font-mono text-xs text-white truncate">${fmtNum(convertSpeed(1,key,'kilometer_per_hour'))}</p></div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-cyan-400 mr-2"></i>Quick Converter</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From (${unit.label})</label>
+          <div class="relative"><input id="spdu-from-val" type="text" inputmode="decimal" value="1" step="any"
+            class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-cyan-500/30"
+            placeholder="Enter value" oninput="spduConvert()" />
+            ${unit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 font-mono text-sm">${unit.symbol}</span>`:''}
+          </div>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">To Unit</label>
+          <div id="spdu-to-wrap"><button id="spdu-to-btn" onclick="spduToggleDrop()"
+            class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-white text-left flex items-center justify-between hover:border-cyan-500/30 transition-all">
+            <span id="spdu-to-label"></span><i class="fa-solid fa-chevron-down text-cyan-400 text-xs transition-transform duration-200" id="spdu-to-chev"></i></button>
+            <div id="spdu-to-drop" class="unit-drop-panel mt-1 rounded-xl border border-white/10 bg-dark-800/98 backdrop-blur-xl shadow-xl overflow-hidden">
+              <div class="p-2 border-b border-white/5"><input id="spdu-to-search" type="text" placeholder="Search units…" class="w-full bg-dark-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 border border-white/5 focus:outline-none focus:border-cyan-500/40" oninput="spduBuildList()" /></div>
+              <div id="spdu-to-list" class="search-dropdown py-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-dark-800/70 border border-white/8 rounded-xl p-4 mb-3">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-gray-600 uppercase tracking-wider">Result</span>
+          <button onclick="spduCopy()" class="text-xs text-gray-600 hover:text-cyan-400 transition-colors flex items-center gap-1"><i class="fa-regular fa-copy text-xs" id="spdu-copy-icon"></i> Copy</button>
+        </div>
+        <div class="flex items-baseline gap-2 flex-wrap"><span id="spdu-result" class="font-mono text-3xl font-bold text-cyan-300 num-shimmer"></span><span id="spdu-result-sym" class="font-mono text-lg text-cyan-400/60"></span></div>
+        <p id="spdu-formula" class="text-xs text-gray-600 font-mono mt-2"></p>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="spduSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 text-sm font-medium hover:bg-cyan-600/25 transition-all">
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap
+        </button>
+        <button onclick="navigate('/speed')" class="flex items-center gap-1.5 text-xs text-gray-600 hover:text-cyan-400 transition-colors"><i class="fa-solid fa-table text-xs"></i>All units</button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-3"><i class="fa-solid fa-circle-info text-cyan-400 mr-2"></i>About ${unit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">${desc.long}</p>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+      <div class="p-4 sm:p-5 border-b border-white/5 flex flex-wrap items-center justify-between gap-3">
+        <div><h2 class="text-base font-semibold text-white">1 ${unit.label} Equals…</h2><p class="text-xs text-gray-600 mt-0.5">Complete conversion table</p></div>
+        <div class="flex flex-wrap gap-1.5" id="spdu-ct-tabs">
+          <button onclick="spduFilterGroup('all')" data-group="all" class="spdutab active text-xs font-medium px-3 py-1.5 rounded-lg bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 transition-all">All</button>
+          <button onclick="spduFilterGroup('metric')" data-group="metric" class="spdutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Metric</button>
+          <button onclick="spduFilterGroup('imperial')" data-group="imperial" class="spdutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Imperial</button>
+          <button onclick="spduFilterGroup('nautical')" data-group="nautical" class="spdutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Nautical</button>
+          <button onclick="spduFilterGroup('scientific')" data-group="scientific" class="spdutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all">Scientific</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-white/5">
+        <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">Unit</th>
+        <th class="text-left px-3 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Symbol</th>
+        <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">1 ${unit.symbol||unit.label} =</th>
+        <th class="px-3 py-3 w-10"></th>
+      </tr></thead><tbody id="spdu-conv-table"></tbody></table></div>
+    </div>
+    ${related.length>0?`<div class="mb-6"><h2 class="text-base font-semibold text-white mb-3"><i class="fa-solid fa-link text-cyan-400 mr-2"></i>Related ${meta.label} Units</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        ${related.map(u=>{const r=convertSpeed(1,key,u.key);return `<a href="/speed/${slug(u.key)}" class="unit-card text-left p-3 rounded-xl border border-white/6 bg-dark-800/40 transition-all duration-200 group">
+          <p class="text-xs font-medium text-gray-300 group-hover:text-white transition-colors mb-1 truncate">${u.label}</p>
+          ${u.symbol?`<p class="font-mono text-xs text-cyan-400 mb-1">${u.symbol}</p>`:''}
+          <p class="font-mono text-xs text-gray-600">${fmtNum(r)}</p></a>`;}).join('')}
+      </div></div>`:''
+    }
+    <div class="rounded-2xl border border-white/8 bg-dark-700/30 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-1">Convert ${unit.label} to Other Speed Units</h2>
+      <p class="text-xs text-gray-600 mb-4">Direct conversion pages</p>
+      <div class="flex flex-wrap gap-2">
+        ${SPEED_UNITS.filter(u=>u.key!==key).sort((a,b)=>a.label.localeCompare(b.label)).map(u=>`<a href="/speed/${slug(key)}-to-${slug(u.key)}" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-dark-800/60 border border-white/5 text-xs text-gray-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-all">${unit.label} → ${u.label}</a>`).join('')}
+      </div>
+    </div>
+    ${buildUnitFaqHtml(unit, desc, 'speed')}
+  </div>`;
+  document.getElementById('spdu-to-label').textContent=spdUnitLabel(getSpeedUnit(spdUnitToKey));
+  spduRenderConvTable('all'); spduConvert(); spduInitOutsideClick();
+}
+
+function spduConvert(){
+  const raw=parseFloat(document.getElementById('spdu-from-val').value);const val=isNaN(raw)?0:raw;
+  const result=convertSpeed(val,spdUnitFromKey,spdUnitToKey);const toUnit=getSpeedUnit(spdUnitToKey);const frUnit=getSpeedUnit(spdUnitFromKey);
+  document.getElementById('spdu-result').textContent=fmtNum(result);document.getElementById('spdu-result-sym').textContent=toUnit.symbol||toUnit.label;
+  document.getElementById('spdu-formula').textContent=`1 ${frUnit.label} = ${fmtNum(convertSpeed(1,spdUnitFromKey,spdUnitToKey))} ${toUnit.label}`;
+}
+function spduCopy(){const val=document.getElementById('spdu-result').textContent;if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});const icon=document.getElementById('spdu-copy-icon');
+  icon.className='fa-solid fa-circle-check text-emerald-400 text-xs';showToast('Copied!');setTimeout(()=>{icon.className='fa-regular fa-copy text-xs';},2000);}
+function spduSwap(){const tmp=spdUnitFromKey;spdUnitFromKey=spdUnitToKey;spdUnitToKey=tmp;
+  const rv=document.getElementById('spdu-result').textContent;if(rv&&rv!=='—')document.getElementById('spdu-from-val').value=rv;
+  document.getElementById('spdu-to-label').textContent=spdUnitLabel(getSpeedUnit(spdUnitToKey));spduConvert();spduRenderConvTable(spdUnitConvGroup);}
+function spduToggleDrop(){const drop=document.getElementById('spdu-to-drop'),chev=document.getElementById('spdu-to-chev');
+  const isOpen=drop.classList.contains('open');if(!isOpen){drop.classList.add('open');chev.classList.add('rotate-180');spduBuildList();setTimeout(()=>document.getElementById('spdu-to-search').focus(),50);}
+  else{drop.classList.remove('open');chev.classList.remove('rotate-180');}}
+function spduBuildList(){const q=(document.getElementById('spdu-to-search').value||'').toLowerCase();
+  const con=document.getElementById('spdu-to-list');con.innerHTML='';
+  const groups=['metric','imperial','nautical','scientific'];const grouped={};groups.forEach(g=>grouped[g]=[]);
+  SPEED_UNITS.filter(u=>!q||u.label.toLowerCase().includes(q)||(u.symbol||'').toLowerCase().includes(q)).forEach(u=>{if(grouped[u.group])grouped[u.group].push(u);});
+  let any=false;
+  groups.forEach(g=>{if(!grouped[g].length)return;any=true;
+    const meta=SPEED_GROUP_META[g];const hd=document.createElement('div');hd.className='px-3 pt-2 pb-1';
+    hd.innerHTML=`<span class="text-xs font-semibold uppercase tracking-widest ${meta.color.split(' ')[1]} opacity-70">${meta.label}</span>`;con.appendChild(hd);
+    grouped[g].forEach(u=>{const cur=spdUnitToKey===u.key;
+      const btn=document.createElement('button');btn.className=`w-full text-left px-3 py-2 text-sm transition-colors hover:bg-cyan-500/10 ${cur?'text-cyan-400 bg-cyan-500/8 font-medium':'text-gray-300'}`;
+      btn.textContent=spdUnitLabel(u);btn.onclick=()=>{spdUnitToKey=u.key;document.getElementById('spdu-to-label').textContent=spdUnitLabel(u);document.getElementById('spdu-to-drop').classList.remove('open');document.getElementById('spdu-to-chev').classList.remove('rotate-180');spduConvert();};con.appendChild(btn);});});
+  if(!any)con.innerHTML='<div class="px-3 py-4 text-sm text-gray-600 text-center">No units found</div>';}
+function spduFilterGroup(g){spdUnitConvGroup=g;
+  document.querySelectorAll('.spdutab').forEach(b=>{const a=b.dataset.group===g;
+    b.className=a?'spdutab text-xs font-medium px-3 py-1.5 rounded-lg bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 transition-all':'spdutab text-xs font-medium px-3 py-1.5 rounded-lg bg-dark-800/80 text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/10 transition-all';});
+  spduRenderConvTable(g);}
+function spduRenderConvTable(group){const tbody=document.getElementById('spdu-conv-table');if(!tbody)return;
+  const units=SPEED_UNITS.filter(u=>u.key!==spdUnitFromKey&&(group==='all'||u.group===group));
+  tbody.innerHTML=units.map(u=>{const meta=SPEED_GROUP_META[u.group];const result=convertSpeed(1,spdUnitFromKey,u.key);
+    return `<tr class="result-row border-b border-white/3 cursor-pointer" onclick="navigate('/speed/${slug(u.key)}')">
+      <td class="px-4 sm:px-5 py-2.5"><span class="text-sm text-gray-200">${u.label}</span></td>
+      <td class="px-3 py-2.5 hidden sm:table-cell"><span class="font-mono text-xs text-gray-500">${u.symbol||'—'}</span></td>
+      <td class="px-4 sm:px-5 py-2.5 text-right"><span class="font-mono text-sm text-gray-300">${fmtNum(result)}</span></td>
+      <td class="px-3 py-2.5"><span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-xs ${meta.color}">${meta.label.slice(0,3)}</span></td>
+    </tr>`;}).join('');}
+function spduInitOutsideClick(){document.addEventListener('click',function handler(e){
+  const w=document.getElementById('spdu-to-wrap'),d=document.getElementById('spdu-to-drop');
+  if(!w){document.removeEventListener('click',handler);return;}
+  if(!w.contains(e.target)){d.classList.remove('open');const c=document.getElementById('spdu-to-chev');if(c)c.classList.remove('rotate-180');}});}
+
+// ================================================================
+//  SPEED CONVERSION PAIR PAGE  e.g. /speed/kilometer-per-hour-to-mile-per-hour
+// ================================================================
+function renderSpeedConversionPage(fromKey,toKey){
+  updateNavActive('speed');
+  const fromUnit=getSpeedUnit(fromKey),toUnit=getSpeedUnit(toKey);
+  if(!fromUnit||!toUnit){navigate('/speed');return;}
+  const fromDesc=SPEED_UNIT_DESC[fromKey]||{short:`Unit of speed: ${fromUnit.label}`,long:`The ${fromUnit.label} is a unit of speed.`};
+  const toDesc=SPEED_UNIT_DESC[toKey]||{short:`Unit of speed: ${toUnit.label}`,long:`The ${toUnit.label} is a unit of speed.`};
+  const fromMeta=SPEED_GROUP_META[fromUnit.group],toMeta=SPEED_GROUP_META[toUnit.group];
+  const factor=convertSpeed(1,fromKey,toKey);
+  updateSEO({title:`Convert ${fromUnit.label} to ${toUnit.label} | Omni Converter`,
+    description:`Instantly convert ${fromUnit.label} to ${toUnit.label}. 1 ${fromUnit.label} = ${fmtNum(factor)} ${toUnit.label}. Free online speed converter.`,
+    url:`https://www.omniconverter.cyou/speed/${slug(fromKey)}-to-${slug(toKey)}`});
+  const commonVals=[0.01,0.1,0.5,1,2,5,10,20,50,100,200,500,1000,10000];
+  const root=document.getElementById('app-root');
+  root.innerHTML=`<div class="page-fade">
+    <nav class="flex items-center gap-2 text-xs text-gray-600 mb-5 flex-wrap">
+      <button onclick="navigate('/')" class="hover:text-cyan-400 transition-colors">Omni Converter</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/speed')" class="hover:text-cyan-400 transition-colors">Speed</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <button onclick="navigate('/speed/${slug(fromKey)}')" class="hover:text-cyan-400 transition-colors">${fromUnit.label}</button>
+      <i class="fa-solid fa-chevron-right text-gray-700 text-xs"></i>
+      <span class="text-gray-400">${fromUnit.label} to ${toUnit.label}</span>
+    </nav>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/50 backdrop-blur-sm p-5 sm:p-7 mb-6">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${fromMeta.color} border border-current/20"><i class="fa-solid ${fromMeta.icon} mr-1.5 text-xs"></i>${fromMeta.label}</span>
+        <i class="fa-solid fa-arrow-right text-gray-600 text-xs"></i>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toMeta.color} border border-current/20"><i class="fa-solid ${toMeta.icon} mr-1.5 text-xs"></i>${toMeta.label}</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-2">Convert ${fromUnit.label} to ${toUnit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed max-w-2xl mb-5">Instantly convert ${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''} to ${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}. Enter any value for real-time results.</p>
+      <div class="inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/25">
+        <div class="text-center"><p class="text-2xl font-bold font-mono text-white">1</p><p class="text-xs text-gray-500 mt-0.5">${fromUnit.label}</p>${fromUnit.symbol?`<p class="font-mono text-xs text-cyan-400">${fromUnit.symbol}</p>`:''}</div>
+        <i class="fa-solid fa-equals text-cyan-400 text-xl"></i>
+        <div class="text-center"><p class="text-2xl font-bold font-mono text-cyan-300">${fmtNum(factor)}</p><p class="text-xs text-gray-500 mt-0.5">${toUnit.label}</p>${toUnit.symbol?`<p class="font-mono text-xs text-cyan-400">${toUnit.symbol}</p>`:''}</div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/60 backdrop-blur-sm shadow-glow p-4 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-cyan-400 mr-2"></i>${fromUnit.label} to ${toUnit.label} Converter</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</label>
+          <div class="relative"><input id="scp-from" type="text" inputmode="decimal" value="1" step="any"
+            class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-2xl font-bold text-white font-mono transition-all hover:border-cyan-500/30"
+            placeholder="Enter value" oninput="scpConvert()" />
+            ${fromUnit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 font-mono text-sm pointer-events-none">${fromUnit.symbol}</span>`:''}
+          </div>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}</label>
+          <div class="relative"><input id="scp-to" type="text" step="any" readonly
+            class="converter-input w-full bg-dark-800/50 border border-cyan-500/20 rounded-xl px-4 py-3 text-2xl font-bold text-cyan-300 font-mono cursor-default" placeholder="Result" />
+            ${toUnit.symbol?`<span class="absolute right-10 top-1/2 -translate-y-1/2 text-cyan-400/60 font-mono text-sm pointer-events-none">${toUnit.symbol}</span>`:''}
+            <button onclick="scpCopy()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-cyan-400 transition-colors"><i class="fa-regular fa-copy text-sm" id="scp-copy-icon"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-xs text-gray-500 mb-4">
+        <i class="fa-solid fa-function text-cyan-500/60 flex-shrink-0"></i>
+        <span class="font-mono truncate" id="scp-formula">1 ${fromUnit.label} × ${fmtNum(factor)} = ${fmtNum(factor)} ${toUnit.label}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <button onclick="scpSwap()" class="swap-btn group flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 text-sm font-medium hover:bg-cyan-600/25 transition-all">
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon text-xs"></i>Swap
+        </button>
+        <button onclick="navigate('/speed/${slug(toKey)}-to-${slug(fromKey)}')" class="text-xs text-gray-600 hover:text-cyan-400 transition-colors">
+          <i class="fa-solid fa-rotate text-xs mr-1"></i>Reverse: ${toUnit.label} → ${fromUnit.label}
+        </button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 backdrop-blur-sm overflow-hidden mb-6">
+      <div class="p-4 sm:p-5 border-b border-white/5"><h2 class="text-base font-semibold text-white">${fromUnit.label} to ${toUnit.label} Table</h2><p class="text-xs text-gray-600 mt-0.5">Common ${fromUnit.label} values and their ${toUnit.label} equivalents</p></div>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-white/5">
+        <th class="text-left px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</th>
+        <th class="text-center px-3 py-3 text-gray-700"><i class="fa-solid fa-arrow-right"></i></th>
+        <th class="text-right px-4 sm:px-5 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">${toUnit.label}${toUnit.symbol?' ('+toUnit.symbol+')':''}</th>
+      </tr></thead><tbody>
+        ${commonVals.map((v,i)=>`<tr class="${i%2===0?'bg-dark-800/20':''} border-b border-white/3 hover:bg-cyan-500/5 transition-colors">
+          <td class="px-4 sm:px-5 py-2.5 font-mono text-sm text-gray-300">${v} ${fromUnit.symbol||fromUnit.label}</td>
+          <td class="px-3 py-2.5 text-center text-gray-700"><i class="fa-solid fa-arrow-right text-xs"></i></td>
+          <td class="px-4 sm:px-5 py-2.5 font-mono text-sm text-cyan-300 text-right">${fmtNum(convertSpeed(v,fromKey,toKey))} ${toUnit.symbol||toUnit.label}</td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-function text-cyan-400 mr-2"></i>How to Convert ${fromUnit.label} to ${toUnit.label}</h2>
+      <p class="text-gray-400 text-sm leading-relaxed mb-4">Multiply the value in <strong class="text-white">${fromUnit.label}</strong> by <strong class="font-mono text-cyan-300">${fmtNum(factor)}</strong>.</p>
+      <div class="bg-dark-800/70 border border-white/8 rounded-xl p-4 font-mono text-sm mb-4">
+        <span class="text-cyan-300">${toUnit.symbol||toUnit.label}</span><span class="text-gray-500"> = </span><span class="text-white">${fromUnit.symbol||fromUnit.label}</span><span class="text-gray-500"> × </span><span class="text-emerald-400">${fmtNum(factor)}</span>
+      </div>
+      <p class="text-gray-400 text-sm"><strong class="text-white">Example:</strong> 100 ${fromUnit.label} = <span class="font-mono text-cyan-300">${fmtNum(convertSpeed(100,fromKey,toKey))} ${toUnit.symbol||toUnit.label}</span></p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5">
+        <div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${fromMeta.color} border border-current/20">${fromUnit.label}</span></div>
+        <h2 class="text-sm font-semibold text-white mb-2">About ${fromUnit.label}</h2>
+        <p class="text-gray-500 text-xs leading-relaxed">${fromDesc.long}</p>
+        <button onclick="navigate('/speed/${slug(fromKey)}')" class="mt-3 text-xs text-cyan-400 hover:text-cyan-300 transition-colors">Full ${fromUnit.label} converter <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></button>
+      </div>
+      <div class="rounded-2xl border border-white/8 bg-dark-700/40 p-5">
+        <div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${toMeta.color} border border-current/20">${toUnit.label}</span></div>
+        <h2 class="text-sm font-semibold text-white mb-2">About ${toUnit.label}</h2>
+        <p class="text-gray-500 text-xs leading-relaxed">${toDesc.long}</p>
+        <button onclick="navigate('/speed/${slug(toKey)}')" class="mt-3 text-xs text-cyan-400 hover:text-cyan-300 transition-colors">Full ${toUnit.label} converter <i class="fa-solid fa-arrow-right text-xs ml-0.5"></i></button>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-white/8 bg-dark-700/30 p-5 sm:p-6 mb-6">
+      <h2 class="text-base font-semibold text-white mb-1">Convert ${fromUnit.label} to Other Speed Units</h2>
+      <p class="text-xs text-gray-600 mb-4">Direct conversion pages from ${fromUnit.label}</p>
+      <div class="flex flex-wrap gap-2">
+        ${SPEED_UNITS.filter(u=>u.key!==fromKey&&u.key!==toKey).sort((a,b)=>a.label.localeCompare(b.label)).map(u=>`<a href="/speed/${slug(fromKey)}-to-${slug(u.key)}" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-dark-800/60 border border-white/5 text-xs text-gray-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-all">${fromUnit.label} to ${u.label}</a>`).join('')}
+      </div>
+    </div>
+    ${buildConvFaqHtml(fromUnit, toUnit, factor, convertSpeed(1,toKey,fromKey), 'speed')}
+  </div>`;
+  window._scpFrom=fromKey;window._scpTo=toKey;scpConvert();
+}
+
+function scpConvert(){
+  const raw=parseFloat(document.getElementById('scp-from')?.value);const val=isNaN(raw)?0:raw;
+  const from=window._scpFrom,to=window._scpTo;if(!from||!to)return;
+  const result=convertSpeed(val,from,to);const toUnit=getSpeedUnit(to);const frUnit=getSpeedUnit(from);if(!toUnit||!frUnit)return;
+  document.getElementById('scp-to').value=fmtNum(result);
+  const f1=convertSpeed(1,from,to);document.getElementById('scp-formula').textContent=`1 ${frUnit.label} × ${fmtNum(f1)} = ${fmtNum(val*f1)} ${toUnit.label}`;
+}
+function scpCopy(){const val=document.getElementById('scp-to').value;if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).catch(()=>{});const icon=document.getElementById('scp-copy-icon');
+  icon.className='fa-solid fa-circle-check text-emerald-400 text-sm';showToast('Copied to clipboard');setTimeout(()=>{icon.className='fa-regular fa-copy text-sm';},2000);}
+function scpSwap(){navigate('/speed/'+slug(window._scpTo)+'-to-'+slug(window._scpFrom));}
+
+// ================================================================
 //  AREA CONVERTER PAGE
 // ================================================================
 function renderAreaPage() {
@@ -4331,7 +5536,7 @@ function buildConvFaqHtml(fromUnit, toUnit, fwdFactor, revFactor, category) {
   const F = n => fmtNum(n);
   const fromSym = fromUnit.symbol ? ` (${fromUnit.symbol})` : '';
   const toSym   = toUnit.symbol   ? ` (${toUnit.symbol})`   : '';
-  const catLabel = category === 'area' ? 'area' : 'length';
+  const catLabel = category === 'area' ? 'area' : category === 'volume' ? 'volume' : category === 'weight' ? 'weight/mass' : category === 'temperature' ? 'temperature' : category === 'speed' ? 'speed' : 'length';
   const items = [
     faqItem(
       `How many ${toUnit.label} are in 1 ${fromUnit.label}?`,
@@ -4368,10 +5573,14 @@ function buildConvFaqHtml(fromUnit, toUnit, fwdFactor, revFactor, category) {
 function buildUnitFaqHtml(unit, desc, category) {
   const F = n => fmtNum(n);
   const sym = unit.symbol ? ` (${unit.symbol})` : '';
-  const catLabel = category === 'area' ? 'area' : 'length';
-  const baseUnit = category === 'area' ? 'square meters' : 'meters';
+  const catLabel = category === 'area' ? 'area' : category === 'volume' ? 'volume' : category === 'weight' ? 'weight/mass' : category === 'temperature' ? 'temperature' : category === 'speed' ? 'speed' : 'length';
+  const baseUnit = category === 'area' ? 'square meters' : category === 'volume' ? 'liters' : category === 'weight' ? 'kilograms' : category === 'temperature' ? 'kelvin' : category === 'speed' ? 'meters/second' : 'meters';
   const baseConv = category === 'area'
     ? convertArea(1, unit.key, 'square_meter')
+    : category === 'volume' ? convertVolume(1, unit.key, 'liter')
+    : category === 'weight' ? convertWeight(1, unit.key, 'kilogram')
+    : category === 'temperature' ? convertTemp(1, unit.key, 'kelvin')
+    : category === 'speed' ? convertSpeed(1, unit.key, 'meter_per_second')
     : convert(1, unit.key, 'meter');
   const items = [
     faqItem(
