@@ -3,7 +3,7 @@
 <head>
   <script async src="https://ss.mrmnd.com/static/a6c22333-4122-4caa-9411-f81a586da181.js"></script>
   <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="a4418e2e-b0af-4fe5-a2ad-d0c8ca58bed8"></script>
-  <script async src="https://ss.mrmnd.com/native.js"></script>
+  <script async src="https://ss.mrmnd.com/dynamic.js" data-mnddynid="ef52e6ed-48cb-4937-a9c2-a18f895e2d0d"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-adsense-account" content="ca-pub-1470482870672850" />
@@ -1279,7 +1279,7 @@ const TEMP_UNITS = [
   { key:'kelvin',              label:'Kelvin',              symbol:'K',   scale:1,          offset:0,         factor:1,             group:'si' },
   { key:'celsius',             label:'Celsius',             symbol:'°C',  scale:1,          offset:273.15,    factor:274.15,        group:'si' },
   { key:'fahrenheit',          label:'Fahrenheit',          symbol:'°F',  scale:5/9,        offset:255.3722222222, factor:255.9277777778, group:'imperial' },
-  { key:'rankine',             label:'Rankine',             symbol:'��R',  scale:5/9,        offset:0,         factor:0.5555555556,  group:'imperial' },
+  { key:'rankine',             label:'Rankine',             symbol:'����R',  scale:5/9,        offset:0,         factor:0.5555555556,  group:'imperial' },
   { key:'reaumur',             label:'Réaumur',             symbol:'°Ré', scale:5/4,        offset:273.15,    factor:274.4,         group:'historical' },
   { key:'triple_point_water',  label:'Triple Point of Water', symbol:'',  scale:273.16,     offset:0,         factor:273.16,        group:'scientific' },
 ];
@@ -1516,6 +1516,12 @@ function insertConverterAd() {
   ad.setAttribute('data-mndazid', '5a137cad-bcb0-475d-b32b-5d16d1124dec');
   ad.className = 'mb-6';
   card.insertAdjacentElement('afterend', ad);
+  // Load native.js AFTER the placeholder exists so the ad library reliably
+  // finds and fills it on every page load (avoids the async-script race).
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://ss.mrmnd.com/native.js';
+  document.head.appendChild(s);
 }
 
 function router() {
