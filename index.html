@@ -3,6 +3,7 @@
 <head>
   <script async src="https://ss.mrmnd.com/static/a6c22333-4122-4caa-9411-f81a586da181.js"></script>
   <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="a4418e2e-b0af-4fe5-a2ad-d0c8ca58bed8"></script>
+  <script async src="https://ss.mrmnd.com/native.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-adsense-account" content="ca-pub-1470482870672850" />
@@ -1278,7 +1279,7 @@ const TEMP_UNITS = [
   { key:'kelvin',              label:'Kelvin',              symbol:'K',   scale:1,          offset:0,         factor:1,             group:'si' },
   { key:'celsius',             label:'Celsius',             symbol:'°C',  scale:1,          offset:273.15,    factor:274.15,        group:'si' },
   { key:'fahrenheit',          label:'Fahrenheit',          symbol:'°F',  scale:5/9,        offset:255.3722222222, factor:255.9277777778, group:'imperial' },
-  { key:'rankine',             label:'Rankine',             symbol:'°R',  scale:5/9,        offset:0,         factor:0.5555555556,  group:'imperial' },
+  { key:'rankine',             label:'Rankine',             symbol:'��R',  scale:5/9,        offset:0,         factor:0.5555555556,  group:'imperial' },
   { key:'reaumur',             label:'Réaumur',             symbol:'°Ré', scale:5/4,        offset:273.15,    factor:274.4,         group:'historical' },
   { key:'triple_point_water',  label:'Triple Point of Water', symbol:'',  scale:273.16,     offset:0,         factor:273.16,        group:'scientific' },
 ];
@@ -1502,7 +1503,27 @@ function getRoute() {
   return { view: 'landing' };
 }
 
+// Insert the native ad slot directly beneath the converter card (if one exists on this page).
+function insertConverterAd() {
+  const root = document.getElementById('app-root');
+  if (!root) return;
+  // The converter card is the element carrying both the shadow-glow and bg-dark-700/60 classes.
+  const card = root.querySelector('[class*="bg-dark-700/60"][class*="shadow-glow"]');
+  if (!card) return;
+  // Avoid inserting twice.
+  if (card.nextElementSibling && card.nextElementSibling.hasAttribute('data-mndazid')) return;
+  const ad = document.createElement('div');
+  ad.setAttribute('data-mndazid', '5a137cad-bcb0-475d-b32b-5d16d1124dec');
+  ad.className = 'mb-6';
+  card.insertAdjacentElement('afterend', ad);
+}
+
 function router() {
+  routerDispatch();
+  insertConverterAd();
+}
+
+function routerDispatch() {
   const route = getRoute();
   window.scrollTo(0, 0);
   if (route.view === 'conv' && route.fromKey && route.toKey) {
