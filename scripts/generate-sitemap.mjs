@@ -18,7 +18,7 @@ const CATEGORY_CONFIG = [
   { slug: 'weight', unitsConstName: 'WEIGHT_UNITS', categoryPriority: '0.8', conversionPriority: '0.7' },
   { slug: 'temperature', unitsConstName: 'TEMP_UNITS', categoryPriority: '0.8', conversionPriority: '0.7' },
   { slug: 'speed', unitsConstName: 'SPEED_UNITS', categoryPriority: '0.8', conversionPriority: '0.7' },
-  { slug: 'time', categoryPriority: '0.7' },
+  { slug: 'time', unitsConstName: 'TIME_UNITS', categoryPriority: '0.8', conversionPriority: '0.7' },
   { slug: 'data', categoryPriority: '0.7' },
   { slug: 'energy', categoryPriority: '0.7' },
 ];
