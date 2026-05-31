@@ -40,12 +40,8 @@
       "destination": "/robots.txt"
     },
     {
-      "source": "/",
+      "source": "/((?!sitemap|robots|index\\.html).*)",
       "destination": "/index.html"
-    },
-    {
-      "source": "/:path+",
-      "destination": "/:path+/index.html"
     }
   ]
 }
