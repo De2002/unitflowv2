@@ -2297,7 +2297,7 @@ function renderLengthPage() {
           <div>
             <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From</label>
             <div class="relative">
-              <input id="home-from-value" type="text" inputmode="decimal" value="1" step="any"
+              <input id="home-from-value" type="number" inputmode="numeric" value="1" step="any"
                 class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-indigo-500/30"
                 placeholder="Enter value" oninput="homeConvert()" />
               <button onclick="homeClear()" id="home-clear-btn"
@@ -2653,7 +2653,7 @@ function renderVolumePage() {
           <div>
             <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From</label>
             <div class="relative">
-              <input id="vol-from-value" type="text" inputmode="decimal" value="1" step="any"
+              <input id="vol-from-value" type="number" inputmode="numeric" value="1" step="any"
                 class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-indigo-500/30"
                 placeholder="Enter value" oninput="volConvert()" />
               <button onclick="volClear()" id="vol-clear-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 transition-colors hidden">
@@ -2897,7 +2897,7 @@ function renderVolumeUnitPage(key){
       <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-indigo-400 mr-2"></i>Quick Converter</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
         <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From (${unit.label})</label>
-          <div class="relative"><input id="vou-from-val" type="text" inputmode="decimal" value="1" step="any"
+          <div class="relative">            <input id="vou-from-val" type="number" inputmode="numeric" value="1" step="any"
             class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-indigo-500/30"
             placeholder="Enter value" oninput="vouConvert()" />
             ${unit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-400 font-mono text-sm">${unit.symbol}</span>`:''}
@@ -3064,7 +3064,7 @@ function renderVolumeConversionPage(fromKey,toKey){
       <h2 class="text-base font-semibold text-white mb-4"><i class="fa-solid fa-arrows-rotate text-indigo-400 mr-2"></i>${fromUnit.label} to ${toUnit.label} Converter</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div><label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">${fromUnit.label}${fromUnit.symbol?' ('+fromUnit.symbol+')':''}</label>
-          <div class="relative"><input id="vcp-from" type="text" inputmode="decimal" value="1" step="any"
+          <div class="relative"><input id="vcp-from" type="number" inputmode="numeric" value="1" step="any"
             class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-2xl font-bold text-white font-mono transition-all hover:border-indigo-500/30"
             placeholder="Enter value" oninput="vcpConvert()" />
             ${fromUnit.symbol?`<span class="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-400 font-mono text-sm pointer-events-none">${fromUnit.symbol}</span>`:''}
@@ -3188,7 +3188,7 @@ function renderWeightPage() {
           <div>
             <label class="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">From</label>
             <div class="relative">
-              <input id="wt-from-value" type="text" inputmode="decimal" value="1" step="any"
+              <input id="wt-from-value" type="number" inputmode="numeric" value="1" step="any"
                 class="converter-input w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-3 text-xl font-semibold text-white font-mono transition-all hover:border-indigo-500/30"
                 placeholder="Enter value" oninput="wtConvert()" />
               <button onclick="wtClear()" id="wt-clear-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 transition-colors hidden">
