@@ -58,9 +58,17 @@ function extractConvFactor(constName, fromKey, toKey) {
 const LENGTH_UNITS  = extractUnits('LENGTH_UNITS');
 const AREA_UNITS    = extractUnits('AREA_UNITS');
 const VOLUME_UNITS  = extractUnits('VOLUME_UNITS');
+const TIME_UNITS    = extractUnits('TIME_UNITS');
+const WEIGHT_UNITS  = extractUnits('WEIGHT_UNITS');
+const TEMP_UNITS    = extractUnits('TEMP_UNITS');
+const SPEED_UNITS   = extractUnits('SPEED_UNITS');
 const UNIT_DESC     = extractDescriptions('UNIT_DESC');
 const AREA_UNIT_DESC  = extractDescriptions('AREA_UNIT_DESC');
 const VOLUME_UNIT_DESC = extractDescriptions('VOLUME_UNIT_DESC');
+const TIME_UNIT_DESC = extractDescriptions('TIME_UNIT_DESC');
+const WEIGHT_UNIT_DESC = extractDescriptions('WEIGHT_UNIT_DESC');
+const TEMP_UNIT_DESC = extractDescriptions('TEMP_UNIT_DESC');
+const SPEED_UNIT_DESC = extractDescriptions('SPEED_UNIT_DESC');
 
 function slug(key) { return key.replace(/_/g, '-'); }
 function keyFromSlug(s) { return s.replace(/-/g, '_'); }
@@ -127,24 +135,36 @@ function getSEO(routePath) {
     };
   }
 
+  // /time/{from}-to-{to}
   if (parts[0] === 'time' && parts[1] && parts[1].includes('-to-')) {
     const idx      = parts[1].indexOf('-to-');
     const fromSlug = parts[1].slice(0, idx);
     const toSlug   = parts[1].slice(idx + 4);
-    return {
-      title: `Convert ${fromSlug.replace(/-/g, ' ')} to ${toSlug.replace(/-/g, ' ')} | Omni Converter`,
-      description: `Instantly convert ${fromSlug.replace(/-/g, ' ')} to ${toSlug.replace(/-/g, ' ')}. Free online time converter with formula and conversion table.`,
-      url: abs
-    };
+    const fromKey  = keyFromSlug(fromSlug);
+    const toKey    = keyFromSlug(toSlug);
+    const fromUnit = TIME_UNITS.find(u => u.key === fromKey);
+    const toUnit   = TIME_UNITS.find(u => u.key === toKey);
+    if (fromUnit && toUnit) {
+      return {
+        title: `Convert ${fromUnit.label} to ${toUnit.label} | ${fromUnit.symbol || fromUnit.label} to ${toUnit.symbol || toUnit.label} Converter | Omni Converter`,
+        description: `Instantly convert ${fromUnit.label}${fromUnit.symbol ? ' (' + fromUnit.symbol + ')' : ''} to ${toUnit.label}${toUnit.symbol ? ' (' + toUnit.symbol + ')' : ''}. Free online time converter with formula and conversion table.`,
+        url: abs
+      };
+    }
   }
 
+  // /time/{unit}
   if (parts[0] === 'time' && parts[1]) {
-    const label = parts[1].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    return {
-      title: `${label} Converter | Omni Converter`,
-      description: `Convert ${label} to other time units. Free online time converter with instant results.`,
-      url: abs
-    };
+    const key  = keyFromSlug(parts[1]);
+    const unit = TIME_UNITS.find(u => u.key === key);
+    if (unit) {
+      const desc = TIME_UNIT_DESC[key] || '';
+      return {
+        title: `${unit.label} Converter — Convert ${unit.label}${unit.symbol ? ' (' + unit.symbol + ')' : ''} | Omni Converter`,
+        description: `Convert ${unit.label}${unit.symbol ? ' (' + unit.symbol + ')' : ''} to seconds, minutes, hours, days and 35+ other time units.${desc ? ' ' + desc : ''}`,
+        url: abs
+      };
+    }
   }
 
   // /length
